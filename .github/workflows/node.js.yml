@@ -13,6 +13,14 @@ jobs:
           node-version: '18.18.0'
       - run: npm install
       - run: npm run test:dev
+      - uses: actions/upload-artifact@master
+        with:
+          name: appSource
+          path: src/app
+      - uses: actions/upload-artifact@master
+        with:
+          name: appLcov
+          path: lcov.info
 
   run-sonar:
     needs: 'run-tests'
@@ -25,6 +33,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      - uses: actions/download-artifact@master
+        with:
+          name: appSource
+          path: src/app
       - name: Setup SonarQube
         uses: warchant/setup-sonar-scanner@v7
       - name: SonarQube Scan
