@@ -13,16 +13,16 @@ jobs:
           node-version: '18.18.0'
       - run: npm install
       - run: npm run test:dev
+
   run-sonar:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-    # Setup java 17 to be default (sonar-scanner requirement as of 5.x)
     - uses: actions/setup-java@v3
       with:
-        distribution: 'temurin' # See 'Supported distributions' for available options
+        distribution: 'temurin'
         java-version: '17'
     - name: Setup SonarQube
         uses: warchant/setup-sonar-scanner@v7
