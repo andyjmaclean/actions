@@ -1,14 +1,13 @@
 name: Check out my other private repo
 run-name: ${{ github.actor }} is linking a project
 on: [push]
-uses: actions/checkout@master
-with:
-  repository: europeana/statistics-dashboard
 jobs:
   run-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          repository: europeana/statistics-dashboard
       - uses: actions/setup-node@v4
         with:
           node-version: '18.18.0'
