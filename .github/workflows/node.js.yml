@@ -20,21 +20,21 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-    - uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-    - name: Setup SonarQube
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Setup SonarQube
         uses: warchant/setup-sonar-scanner@v7
-    - name: SonarQube Scan
-      env:
-        SONAR_URL: ${{ secrets.SONAR_URL }}
-      run: sonar-scanner
-        -Dsonar.host.url=https://sonarcloud.io
-        -Dsonar.organization=europeana
-        -Dsonar.projectKey=europeana_statistics-dashboard
-        -Dsonar.token="$SONAR_TOKEN"
-        -Dsonar.test.inclusions=**/*.spec.ts
-        -Dsonar.sources=src/app
-        -Dsonar.exclusions=src/**/_mocked/**
-        -Dsonar.javascript.lcov.reportPaths=lcov.info
+      - name: SonarQube Scan
+        env:
+          SONAR_URL: ${{ secrets.SONAR_URL }}
+        run: sonar-scanner
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.organization=europeana
+          -Dsonar.projectKey=europeana_statistics-dashboard
+          -Dsonar.token="$SONAR_TOKEN"
+          -Dsonar.test.inclusions=**/*.spec.ts
+          -Dsonar.sources=src/app
+          -Dsonar.exclusions=src/**/_mocked/**
+          -Dsonar.javascript.lcov.reportPaths=lcov.info
