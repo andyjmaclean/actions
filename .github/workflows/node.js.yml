@@ -20,7 +20,7 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: appLcov
-          path: ./lcov.info
+          path: lcov.info
 
   run-sonar:
     needs: 'run-tests'
@@ -38,7 +38,6 @@ jobs:
           - name: appSource
             path: src/app
           - name: appLcov
-            path: ./
       - name: Setup SonarQube
         uses: warchant/setup-sonar-scanner@v7
       - name: SonarQube Scan
