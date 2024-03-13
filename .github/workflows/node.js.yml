@@ -25,7 +25,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         name: europeana/statistics-dashboard
-        ref: refs/heads/release
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
