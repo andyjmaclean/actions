@@ -1,5 +1,5 @@
-name: Check out my other private repo
-run-name: ${{ github.actor }} is linking a project
+name: Build & Test Stats Dashboard
+run-name: ${{ github.actor }} is building / testing the stats-dash
 on: [push]
 jobs:
   run-tests:
@@ -13,3 +13,28 @@ jobs:
           node-version: '18.18.0'
       - run: npm install
       - run: npm run test:dev
+  run-sonar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+    # Setup java 17 to be default (sonar-scanner requirement as of 5.x)
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin' # See 'Supported distributions' for available options
+        java-version: '17'
+    - name: Setup SonarQube
+        uses: warchant/setup-sonar-scanner@v7
+    - name: SonarQube Scan
+      env:
+        SONAR_URL: ${{ secrets.SONAR_URL }}
+      run: sonar-scanner
+        -Dsonar.host.url=https://sonarcloud.io
+        -Dsonar.organization=europeana
+        -Dsonar.projectKey=europeana_statistics-dashboard
+        -Dsonar.token="$SONAR_TOKEN"
+        -Dsonar.test.inclusions=**/*.spec.ts
+        -Dsonar.sources=src/app
+        -Dsonar.exclusions=src/**/_mocked/**
+        -Dsonar.javascript.lcov.reportPaths=lcov.info
