@@ -12,4 +12,4 @@ jobs:
         with:
           node-version: '18.18.0'
       - run: npm install
-      - run: npm test:dev
+      - run: npm run test:dev
