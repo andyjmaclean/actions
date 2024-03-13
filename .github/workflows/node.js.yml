@@ -1,5 +1,5 @@
 name: Check out my other private repo
 run-name: ${{ github.actor }} is linking a project
 uses: actions/checkout@master
-  with:
-    repository: europeana/statistics-dashboard
+with:
+  repository: europeana/statistics-dashboard
