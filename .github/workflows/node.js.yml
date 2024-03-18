@@ -13,6 +13,7 @@ jobs:
           node-version: '18.18.0'
       - run: npm install
       - run: npm run test:dev
+      - run: cp coverage/**/lcov.info .
       - uses: actions/upload-artifact@master
         with:
           name: appSource
