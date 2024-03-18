@@ -5,21 +5,24 @@ jobs:
   create-env-file:
     env:
       APP_FEEDBACK_URL: ${{ vars.APP_FEEDBACK_URL }}
-      APP_WS_KEY: ${{ secrets.APP_WS_KEY }}
+      #APP_WS_KEY: ${{ secrets.APP_WS_KEY }}
+      APP_WS_KEY: FAKE_KEY
       APP_SERVER_API: ${{ secrets.APP_SERVER_API }}
+      APP_MATOMO_SITE_ID: 'matomo_SITE_id'
+      APP_MAINTENANCE_SCHEDULE_ENV_URL: 'MAINTENANCE_URL'
     runs-on: ubuntu-latest
     steps:
       - run: |
           touch env_file
           echo APP_FEEDBACK_URL=${{ env.APP_FEEDBACK_URL }} >> env_file
-          echo APP_SERVER_API=${{ secrets.APP_SERVER_API }} >> env_file
+          echo APP_WS_KEY=${{ env.APP_WS_KEY }} >> env_file
           echo APP_SERVER_API=${{ env.APP_SERVER_API }} >> env_file
-          echo APP_SERVER_PORTAL=$secrets.APP_SERVER_PORTAL >> env_file
+          echo APP_SERVER_PORTAL=${{ env.APP_SERVER_PORTAL }} >> env_file
           echo APP_WS_KEY="$APP_WS_KEY" >> env_file
-          echo APP_MAINTENANCE_SCHEDULE_ENV_URL=${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_URL }} >> env_file
-          echo APP_MAINTENANCE_SCHEDULE_ENV_KEY=${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_KEY }} >> env_file
-          echo APP_MATOMO_HOST=${{ secrets.APP_MATOMO_HOST }} >> env_file
-          echo APP_MATOMO_SITE_ID=${{ secrets.APP_MATOMO_SITE_ID }} >> env_file
+          echo APP_MAINTENANCE_SCHEDULE_ENV_URL=${{ env.APP_MAINTENANCE_SCHEDULE_ENV_URL }} >> env_file
+          echo APP_MAINTENANCE_SCHEDULE_ENV_KEY=${{ env.APP_MAINTENANCE_SCHEDULE_ENV_KEY }} >> env_file
+          echo APP_MATOMO_HOST=${{ env.APP_MATOMO_HOST }} >> env_file
+          echo APP_MATOMO_SITE_ID=${{ env.APP_MATOMO_SITE_ID }} >> env_file
           cat env_file
       - run: exit -1
   run-tests:
