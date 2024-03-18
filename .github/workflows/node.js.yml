@@ -4,6 +4,7 @@ on: [push]
 jobs:
   create-env-file:
     env:
+      APP_FEEDBACK_URL: ${{ env.APP_FEEDBACK_URL }}
       APP_WS_KEY: ${{ secrets.APP_WS_KEY }}
       APP_SERVER_API: ${{ secrets.APP_SERVER_API }}
     runs-on: ubuntu-latest
