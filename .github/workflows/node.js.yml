@@ -48,10 +48,10 @@ jobs:
             -Dsonar.exclusions=src/**/_mocked/**
             -Dsonar.javascript.lcov.reportPaths=./lcov.info/lcov.info
   build-docker-image:
-    needs: 'run-tests'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: checkout
+        uses: actions/checkout@v4
         with:
           repository: europeana/statistics-dashboard
       - uses: actions/setup-node@v4
