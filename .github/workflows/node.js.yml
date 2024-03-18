@@ -22,6 +22,10 @@ jobs:
         with:
           name: appLcov
           path: ./lcov.info
+      - uses: actions/upload-artifact@master
+        with:
+          name: gitRefs
+          path: ./git/refs
 
   run-sonar:
     needs: 'run-tests'
@@ -42,6 +46,10 @@ jobs:
         with:
           name: appLcov
           path: ./lcov.info
+      - uses: actions/download-artifact@master
+        with:
+          name: gitRefs
+          path: ./git/refs
       - name: Setup SonarQube
         uses: warchant/setup-sonar-scanner@v7
       - name: SonarQube Scan
