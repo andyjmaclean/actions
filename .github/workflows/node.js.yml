@@ -14,24 +14,18 @@ jobs:
       - run: npm install
       - run: npm run test:dev
       - run: cp coverage/**/lcov.info .
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-      - name: Setup SonarQube
-        uses: warchant/setup-sonar-scanner@v7
       - name: SonarQube Scan
+        uses: sonarsource/sonarcloud-github-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: sonar-scanner
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.organization=europeana
-          -Dsonar.projectKey=europeana_statistics-dashboard
-          -Dsonar.token="$SONAR_TOKEN"
-          -Dsonar.test.inclusions=**/*.spec.ts
-          -Dsonar.sources=src/app
-          -Dsonar.exclusions=src/**/_mocked/**
-          -Dsonar.javascript.lcov.reportPaths=./lcov.info
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.organization=europeana
+            -Dsonar.projectKey=europeana_statistics-dashboard
+            -Dsonar.token="$SONAR_TOKEN"
+            -Dsonar.test.inclusions=**/*.spec.ts
+            -Dsonar.sources=src/app
+            -Dsonar.exclusions=src/**/_mocked/**
+            -Dsonar.javascript.lcov.reportPaths=./lcov.info
