@@ -2,7 +2,23 @@ name: Build & Test Stats Dashboard
 run-name: ${{ github.actor }} is building / testing the stats-dash
 on: [push]
 jobs:
+  create-env-file:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          touch env_file
+          echo APP_FEEDBACK_URL=${{ secrets.APP_FEEDBACK_URL }} >> env_file
+          echo APP_SERVER_API=${{ secrets.APP_SERVER_API }} >> env_file
+          echo APP_SERVER_PORTAL=${{ secrets.APP_SERVER_PORTAL }} >> env_file
+          echo APP_WS_KEY=${{ secrets.APP_WS_KEY }} >> env_file
+          echo APP_MAINTENANCE_SCHEDULE_ENV_URL=${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_URL }} >> env_file
+          echo APP_MAINTENANCE_SCHEDULE_ENV_KEY=${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_KEY }} >> env_file
+          echo APP_MATOMO_HOST=${{ secrets.APP_MATOMO_HOST }} >> env_file
+          echo APP_MATOMO_SITE_ID=${{ secrets.APP_MATOMO_SITE_ID }} >> env_file
+          cat env_file
+      - run: exit -1
   run-tests:
+    needs: create-env-file
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -92,7 +108,21 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+#        uses: actions/checkout@v4
+
 #tags: europeana/statistics-dashboard-ui/${{ git log -1 --pretty=%h }}
 #docker build  \
 #-t ${IMAGE_FULL_VALUE} \
 #-t ${IMAGE_LAST_COMMIT} \
+
+# create env file
+#cat > deployment/$DEPLOY_TARGET/env_file << EOF
+#APP_FEEDBACK_URL=$APP_FEEDBACK_URL
+#APP_SERVER_API=$APP_SERVER_API
+#APP_SERVER_PORTAL=$APP_SERVER_PORTAL
+#APP_WS_KEY=$APP_WS_KEY
+#APP_MAINTENANCE_SCHEDULE_ENV_URL=$APP_MAINTENANCE_SCHEDULE_ENV_URL
+#APP_MAINTENANCE_SCHEDULE_ENV_KEY=$APP_MAINTENANCE_SCHEDULE_ENV_KEY
+#APP_MATOMO_HOST=$APP_MATOMO_HOST
+#APP_MATOMO_SITE_ID=$APP_MATOMO_SITE_ID
+#EOF
