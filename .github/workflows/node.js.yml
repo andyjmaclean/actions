@@ -75,7 +75,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/clockbox:latest
+          tags: europeana/statistics-dashboard-ui/${{ git log -1 --pretty=%h }}
 
 #docker build  \
 #-t ${IMAGE_FULL_VALUE} \
