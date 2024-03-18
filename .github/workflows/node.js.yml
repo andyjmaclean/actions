@@ -21,7 +21,7 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: appLcov
-          path: .
+          path: ./lcov.info
   run-sonar:
     needs: 'run-tests'
     runs-on: ubuntu-latest
@@ -33,7 +33,7 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: appLcov
-          path: .
+          path: ./lcov.info
       - name: SonarQube Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
@@ -46,4 +46,4 @@ jobs:
             -Dsonar.test.inclusions=**/*.spec.ts
             -Dsonar.sources=src/app
             -Dsonar.exclusions=src/**/_mocked/**
-            -Dsonar.javascript.lcov.reportPaths=./lcov.info
+            -Dsonar.javascript.lcov.reportPaths=./lcov.info/lcov.info
