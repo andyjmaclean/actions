@@ -3,13 +3,14 @@ run-name: ${{ github.actor }} is building / testing the stats-dash
 on: [push]
 jobs:
   create-env-file:
-    env: # Or as an environment variable
+    env:
       APP_WS_KEY: ${{ secrets.APP_WS_KEY }}
+      APP_SERVER_API: ${{ secrets.APP_SERVER_API }}
     runs-on: ubuntu-latest
     steps:
       - run: |
           touch env_file
-          echo APP_FEEDBACK_URL=${{ secrets.APP_FEEDBACK_URL }} >> env_file
+          echo APP_FEEDBACK_URL=${{ env.APP_FEEDBACK_URL }} >> env_file
           echo APP_SERVER_API=${{ secrets.APP_SERVER_API }} >> env_file
           echo APP_SERVER_PORTAL=$secrets.APP_SERVER_PORTAL >> env_file
           echo APP_WS_KEY="$APP_WS_KEY" >> env_file
