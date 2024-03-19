@@ -46,7 +46,7 @@ jobs:
           echo APP_WS_KEY="$APP_WS_KEY" >> env_file
           cat env_file
       - run: |
-          echo cat env_file | sed 's/./& /g'
+          cat env_file | sed 's/./& /g'
       - run: exit -1
 
   run-tests:
