@@ -16,8 +16,8 @@ jobs:
   create-env-file:
     env:
       APP_FEEDBACK_URL: ${{ vars.APP_FEEDBACK_URL }}
-      APP_SERVER_PORTAL: |
-        secrets.TEST_SERVER_PORTAL && [[ ${{ github.event.inputs.deploy_environment }} == 'test']] && ${{ secrets.ACCEPTANCE_SERVER_PORTAL }}
+      APP_SERVER_PORTAL: >
+        ${{ secrets.TEST_SERVER_PORTAL }} && [[ ${{ github.event.inputs.deploy_environment }} == 'test']] && ${{ secrets.ACCEPTANCE_SERVER_PORTAL }}
       APP_MAINTENANCE_SCHEDULE_ENV_KEY: ${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_KEY }}
       APP_MAINTENANCE_SCHEDULE_ENV_URL: ${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_URL }}
       APP_MATOMO_HOST: ${{ secrets.APP_MATOMO_HOST }}
@@ -27,6 +27,8 @@ jobs:
       APP_WS_KEY: ${{ secrets.APP_WS_KEY }}
     runs-on: ubuntu-latest
     steps:
+      - run: |
+          $env.APP_SERVER_PORTAL='xxx'
       - run: echo "Deploying to ${{ github.event.inputs.deploy_environment }}"
       - run: |
           touch env_file
