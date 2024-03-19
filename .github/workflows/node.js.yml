@@ -9,9 +9,9 @@ on:
         default: 'test'
         type: choice
         options:
-          - test
-          - acceptance
-          - production
+        - test
+        - acceptance
+        - production
 jobs:
   create-env-file:
     env:
