@@ -16,15 +16,14 @@ jobs:
   create-env-file:
     env:
       APP_FEEDBACK_URL: ${{ vars.APP_FEEDBACK_URL }}
-      APP_MAINTENANCE_SCHEDULE_ENV_KEY: |
       APP_SERVER_PORTAL: |
-        $(( 'test' == 'github.event.inputs.deploy_environment' ? ${{ secrets.TEST_SERVER_PORTAL }} : ${{ secrets.PRODUCTION_SERVER_PORTAL }} ))
+        $(( 'test' == github.event.inputs.deploy_environment ? secrets.TEST_SERVER_PORTAL : secrets.PRODUCTION_SERVER_PORTAL ))
       APP_MAINTENANCE_SCHEDULE_ENV_KEY: ${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_KEY }}
       APP_MAINTENANCE_SCHEDULE_ENV_URL: ${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_URL }}
       APP_MATOMO_HOST: ${{ secrets.APP_MATOMO_HOST }}
       APP_MATOMO_SITE_ID: ${{ secrets.APP_MATOMO_SITE_ID }}
       APP_SERVER_API: ${{ secrets.APP_SERVER_API }}
-      APP_SERVER_PORTAL: ${{ secrets.APP_SERVER_PORTAL }}
+      #APP_SERVER_PORTAL: ${{ secrets.APP_SERVER_PORTAL }}
       APP_WS_KEY: ${{ secrets.APP_WS_KEY }}
     runs-on: ubuntu-latest
     steps:
