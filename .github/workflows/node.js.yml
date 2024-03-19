@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          $env.APP_SERVER_PORTAL='xxx'
+          env.APP_SERVER_PORTAL='xxx'
       - run: echo "Deploying to ${{ github.event.inputs.deploy_environment }}"
       - run: |
           touch env_file
