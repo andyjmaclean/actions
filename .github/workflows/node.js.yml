@@ -16,12 +16,7 @@ jobs:
   create-env-file:
     env:
       APP_FEEDBACK_URL: ${{ vars.APP_FEEDBACK_URL }}
-      APP_SERVER_PORTAL: |
-        case "$github.event.inputs.deploy_environment" in
-        'production') res='the-production' ;;
-        'acceptance') res='the-acceptance' ;;
-        *) res='the-test' ;;
-        esac
+      APP_SERVER_PORTAL: 'TODO'
       APP_MAINTENANCE_SCHEDULE_ENV_KEY: ${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_KEY }}
       APP_MAINTENANCE_SCHEDULE_ENV_URL: ${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_URL }}
       APP_MATOMO_HOST: ${{ secrets.APP_MATOMO_HOST }}
@@ -34,6 +29,19 @@ jobs:
       - run: echo "Deploying to ${{ github.event.inputs.deploy_environment }}"
       - run: |
           touch env_file
+      - run: |
+          case "$github.event.inputs.deploy_environment" in
+            'production')
+              echo APP_SERVER_PORTAL=${{ secrets.TEST_SERVER_PORTAL }} >> env_file
+            ;;
+            'acceptance')
+              echo APP_SERVER_PORTAL='secrets.ACCEPTANCE_SERVER_PORTAL' >> env_file
+            ;;
+            *)
+              echo APP_SERVER_PORTAL=${{ secrets.TEST_SERVER_PORTAL }} >> env_file
+            ;;
+          esac
+      - run: |
           echo APP_FEEDBACK_URL="$APP_FEEDBACK_URL" >> env_file
           echo APP_MAINTENANCE_SCHEDULE_ENV_KEY=${{ env.APP_MAINTENANCE_SCHEDULE_ENV_KEY }} >> env_file
           echo APP_MAINTENANCE_SCHEDULE_ENV_URL=${{ env.APP_MAINTENANCE_SCHEDULE_ENV_URL }} >> env_file
