@@ -26,6 +26,7 @@ jobs:
           echo APP_WS_KEY="$APP_WS_KEY" >> env_file
           cat env_file
       - run: exit -1
+
   run-tests:
     needs: create-env-file
     runs-on: ubuntu-latest
@@ -47,6 +48,7 @@ jobs:
         with:
           name: appLcov
           path: ./lcov.info
+
   run-sonar:
     needs: 'run-tests'
     runs-on: ubuntu-latest
@@ -74,6 +76,7 @@ jobs:
             -Dsonar.sources=src/app
             -Dsonar.exclusions=src/**/_mocked/**
             -Dsonar.javascript.lcov.reportPaths=./lcov.info/lcov.info
+
   build-docker-image:
     runs-on: ubuntu-latest
     steps:
@@ -92,7 +95,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Set up Docker Buildx
+
+      - name: Set up Docker Build
         uses: docker/setup-buildx-action@v3
 
       - name: Extract Metadata for Docker Image
