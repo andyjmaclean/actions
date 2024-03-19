@@ -1,6 +1,12 @@
 name: Build & Test Stats Dashboard
 run-name: ${{ github.actor }} is building / testing the stats-dash
-on: [push]
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'test'
 jobs:
   create-env-file:
     env:
@@ -14,6 +20,7 @@ jobs:
       APP_WS_KEY: ${{ secrets.APP_WS_KEY }}
     runs-on: ubuntu-latest
     steps:
+      - run: echo "Deploying to ${{ github.event.inputs.deploy_environment }}"
       - run: |
           touch env_file
           echo APP_FEEDBACK_URL="$APP_FEEDBACK_URL" >> env_file
