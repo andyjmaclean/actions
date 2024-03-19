@@ -30,7 +30,7 @@ jobs:
       - run: |
           touch env_file
       - run: |
-          case "$github.event.inputs.deploy_environment" in
+          case ${{ github.event.inputs.deploy_environment }} in
             'production')
               echo APP_SERVER_PORTAL='secrets.PRODUCTION_SERVER_PORTAL' >> env_file
             ;;
