@@ -14,7 +14,7 @@ on:
         - production
 jobs:
   call-create-env-file:
-    uses: andyjmaclean/actions/.github/workflows/env-file-generation.yml@main
+    uses: andyjmaclean/actions/.github/workflows/env-file-generation.yml@master
     secrets: inherit
 
   create-env-file:
