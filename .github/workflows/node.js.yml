@@ -126,7 +126,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-
   build-docker-x:
     runs-on: ubuntu-latest
     steps:
@@ -140,11 +139,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: andyjmaclean/statistics-dashboard
-          tags: |
-            type=schedule
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=sha
+      - name: Log Metadata
+      - run: echo ${{ steps.meta.outputs.labels }}
+      - run: echo ${{ steps.meta.outputs.tags }}
