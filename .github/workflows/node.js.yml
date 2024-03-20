@@ -15,7 +15,6 @@ on:
 jobs:
 
   make-env-file:
-    if: false
     uses: ./.github/workflows/env-file-generation.yml
     with:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
