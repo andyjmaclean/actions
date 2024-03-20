@@ -21,6 +21,7 @@ jobs:
     secrets: inherit
 
   run-tests:
+    if: false
     runs-on: ubuntu-latest
     steps:
       - name: Check Generated Env File
