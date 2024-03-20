@@ -20,29 +20,18 @@ jobs:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
     secrets: inherit
 
-  test-env-file:
-    needs: 'make-env-file'
+  run-tests:
+
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@master
+      - name: Check Generated Env File
+        uses: actions/download-artifact@master
         with:
           name: envFile
           path: env_file
       - run: |
           echo 'retrieved env file...'
           cat env_file/env_file | sed 's/./& /g'
-
-  run-tests:
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      #- name: Check Generated Env File
-      #  uses: actions/download-artifact@master
-      #  with:
-      #    name: envFile
-      #    path: env_file
-      #- run: |
-      #    echo 'retrieved env file...'
-      #    cat env_file/env_file | sed 's/./& /g'
       - uses: actions/checkout@v4
         with:
           repository: europeana/statistics-dashboard
@@ -62,7 +51,6 @@ jobs:
           path: ./lcov.info
 
   run-sonar:
-    if: false
     needs: 'run-tests'
     runs-on: ubuntu-latest
     steps:
@@ -91,7 +79,6 @@ jobs:
             -Dsonar.javascript.lcov.reportPaths=./lcov.info/lcov.info
 
   build-docker-image:
-    if: true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -118,8 +105,6 @@ jobs:
       - name: Extract Metadata for Docker Image
         id: meta
         uses: docker/metadata-action@v5
-        env:
-          PROJECT_VERSION: ${{ secrets.PROJECT_VERSION }}
         with:
           images: andyjmaclean/statistics-dashboard
           tags: |
@@ -130,8 +115,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
-            type=raw,value=latest,enable={{is_default_branch}}
-            europeana/statistics-dashboard-ui:${{ env.PROJECT_VERSION }}
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -140,32 +124,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-  build-docker-x:
-    if: false
-    runs-on: ubuntu-latest
-    #IMAGE_FULL_VALUE=${ORGANIZATION}/${IMAGE_NAME}:${PROJECT_VERSION}
-    #IMAGE_LAST_COMMIT=${ORGANIZATION}/${IMAGE_NAME}:${GIT_REVISION}
-    #IMAGE_FULL_VALUE=europeana/statistics-dashboard-ui:${PROJECT_VERSION}
-    #IMAGE_LAST_COMMIT=europeana/statistics-dashboard-ui:${{ github.sha }}
-    steps:
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Extract Metadata for Docker Image
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: andyjmaclean/statistics-dashboard
-      - run: echo ${{ steps.meta.outputs.tags }}
-      - run: |
-          echo 'BEFORE'
-          echo ${{ github.sha }}
-      - uses: actions/checkout@v4
-        with:
-          repository: europeana/statistics-dashboard
-      - run: |
-          echo 'AFTER'
-          echo ${{ github.sha }}
