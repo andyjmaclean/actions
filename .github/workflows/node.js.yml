@@ -116,6 +116,8 @@ jobs:
       - name: Extract Metadata for Docker Image
         id: meta
         uses: docker/metadata-action@v5
+        env:
+          PROJECT_VERSION: ${{ secrets.PROJECT_VERSION }}
         with:
           images: andyjmaclean/statistics-dashboard
           tags: |
@@ -126,6 +128,8 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
+            europeana/statistics-dashboard-ui:${{ env.PROJECT_VERSION }}
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
