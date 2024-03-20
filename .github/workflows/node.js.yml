@@ -15,8 +15,7 @@ on:
 jobs:
 
   make-env-file:
-    #uses: andyjmaclean/actions/.github/workflows/env-file-generation.yml@master
-    uses: ./env-file-generation.yml@master
+    uses: andyjmaclean/actions/.github/workflows/env-file-generation.yml@master
     with:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
     secrets: inherit
