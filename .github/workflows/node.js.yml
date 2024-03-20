@@ -20,15 +20,18 @@ jobs:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
     secrets: inherit
 
+
   test-env-file:
     needs: 'make-env-file'
-    uses: actions/download-artifact@master
-    with:
-      name: envFile
-      path: env_file
-    run: |
-      echo 'retrieved env file...'
-      cat env_file/env_file | sed 's/./& /g'
+    steps:
+      - name: Check Generated Env File
+        uses: actions/download-artifact@master
+        with:
+          name: envFile
+          path: env_file
+      - run: |
+          echo 'retrieved env file...'
+          cat env_file/env_file | sed 's/./& /g'
 
   run-tests:
 
