@@ -13,59 +13,15 @@ on:
         - acceptance
         - production
 jobs:
-  call-create-env-file:
+
+  make-env-file:
     uses: andyjmaclean/actions/.github/workflows/env-file-generation.yml@master
     with:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
     secrets: inherit
 
-  #create-env-file:
-    #env:
-      #APP_FEEDBACK_URL: ${{ vars.APP_FEEDBACK_URL }}
-      #APP_SERVER_PORTAL: 'TODO'
-      #APP_MAINTENANCE_SCHEDULE_ENV_KEY: ${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_KEY }}
-      #APP_MAINTENANCE_SCHEDULE_ENV_URL: ${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_URL }}
-      #APP_MATOMO_HOST: ${{ secrets.APP_MATOMO_HOST }}
-      #APP_MATOMO_SITE_ID: ${{ secrets.APP_MATOMO_SITE_ID }}
-      #APP_SERVER_API: ${{ secrets.APP_SERVER_API }}
-      #APP_SERVER_PORTAL: ${{ secrets.APP_SERVER_PORTAL }}
-      #APP_WS_KEY: ${{ secrets.APP_WS_KEY }}
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - run: echo "Deploying to ${{ github.event.inputs.deploy_environment }}"
-  #    - run: |
-  #        touch env_file
-  #    - run: |
-  #        case ${{ github.event.inputs.deploy_environment }} in
-  #          'production')
-  #            echo APP_SERVER_PORTAL=${{ secrets.PRODUCTION_SERVER_PORTAL }} >> env_file
-  #            echo APP_WS_KEY=${{ secrets.PRODUCTION_WS_KEY }} >> env_file
-  #            echo APP_SERVER_API=${{ secrets.PRODUCTION_SERVER_API }} >> env_file
-  #          ;;
-  #          'acceptance')
-  #            echo APP_SERVER_PORTAL=${{ secrets.ACCEPTANCE_SERVER_PORTAL }} >> env_file
-  #            echo APP_WS_KEY=${{ secrets.ACCEPTANCE_WS_KEY }} >> env_file
-  #            echo APP_SERVER_API=${{ secrets.ACCEPTANCE_SERVER_API }} >> env_file
-  #          ;;
-  #          'test')
-  #            echo APP_SERVER_PORTAL=${{ secrets.TEST_SERVER_PORTAL }} >> env_file
-  #            echo APP_WS_KEY=${{ secrets.TEST_WS_KEY }} >> env_file
-  #            echo APP_SERVER_API=${{ secrets.TEST_SERVER_API }} >> env_file
-  #          ;;
-  #        esac
-  #    - run: |
-  #        echo APP_FEEDBACK_URL=${{ vars.APP_FEEDBACK_URL }} >> env_file
-  #        echo APP_MAINTENANCE_SCHEDULE_ENV_KEY=${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_KEY }} >> env_file
-  #        echo APP_MAINTENANCE_SCHEDULE_ENV_URL=${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_URL }} >> env_file
-  #        echo APP_MATOMO_HOST=${{ secrets.APP_MATOMO_HOST }} >> env_file
-  #        echo APP_MATOMO_SITE_ID=${{ secrets.APP_MATOMO_SITE_ID }} >> env_file
-  #        cat env_file
-  #    - run: |
-  #        cat env_file | sed 's/./& /g'
-  #    - run: exit -1
-
   run-tests:
-    needs: call-create-env-file
+    needs: make-env-file
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -157,22 +113,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-#        uses: actions/checkout@v4
-
-#tags: europeana/statistics-dashboard-ui/${{ git log -1 --pretty=%h }}
-#docker build  \
-#-t ${IMAGE_FULL_VALUE} \
-#-t ${IMAGE_LAST_COMMIT} \
-
-# create env file
-#cat > deployment/$DEPLOY_TARGET/env_file << EOF
-#APP_FEEDBACK_URL=$APP_FEEDBACK_URL
-#APP_SERVER_API=$APP_SERVER_API
-#APP_SERVER_PORTAL=$APP_SERVER_PORTAL
-#APP_WS_KEY=$APP_WS_KEY
-#APP_MAINTENANCE_SCHEDULE_ENV_URL=$APP_MAINTENANCE_SCHEDULE_ENV_URL
-#APP_MAINTENANCE_SCHEDULE_ENV_KEY=$APP_MAINTENANCE_SCHEDULE_ENV_KEY
-#APP_MATOMO_HOST=$APP_MATOMO_HOST
-#APP_MATOMO_SITE_ID=$APP_MATOMO_SITE_ID
-#EOF
