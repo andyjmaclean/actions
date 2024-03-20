@@ -22,15 +22,15 @@ jobs:
 
 
   test-env-file:
-    if: true
     needs: 'make-env-file'
-    uses: actions/download-artifact@master
-    with:
-      name: envFile
-      path: env_file
-    run: |
-      echo 'retrieved env file...'
-      cat env_file/env_file | sed 's/./& /g'
+    steps:
+      uses: actions/download-artifact@master
+      with:
+        name: envFile
+        path: env_file
+      run: |
+        echo 'retrieved env file...'
+        cat env_file/env_file | sed 's/./& /g'
 
   run-tests:
     if: false
