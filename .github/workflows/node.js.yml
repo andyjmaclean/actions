@@ -15,20 +15,21 @@ on:
 jobs:
 
   make-env-file:
+    uses: workflows/env-file-generation.yml@master
+    with:
+      deploy_environment: ${{ inputs.deploy_environment }}
+    secrets: inherit
+
+  test-env-file:
     if: true
-    steps:
-      - uses: andyjmaclean/actions/.github/workflows/env-file-generation.yml@master
-        with:
-          deploy_environment: ${{ inputs.deploy_environment }}
-        secrets: inherit
-      - name: Check Generated Env File
-        uses: actions/download-artifact@master
-        with:
-          name: envFile
-          path: env_file
-      - run: |
-          echo 'retrieved env file...'
-          cat env_file/env_file | sed 's/./& /g'
+    needs: 'make-env-file'
+    uses: actions/download-artifact@master
+    with:
+      name: envFile
+      path: env_file
+    run: |
+      echo 'retrieved env file...'
+      cat env_file/env_file | sed 's/./& /g'
 
   run-tests:
     if: false
