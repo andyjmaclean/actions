@@ -139,4 +139,4 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: andyjmaclean/statistics-dashboard
-        run: echo ${{ steps.meta.outputs.tags }}
+      - run: echo ${{ steps.meta.outputs.tags }}
