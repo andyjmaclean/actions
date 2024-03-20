@@ -34,7 +34,6 @@ jobs:
               echo APP_MAINTENANCE_SCHEDULE_ENV_KEY=${{ secrets.TEST_MAINTENANCE_SCHEDULE_ENV_KEY }} >> env_file
             ;;
           esac
-      - run: |
           echo APP_FEEDBACK_URL=${{ vars.APP_FEEDBACK_URL }} >> env_file
           echo APP_MAINTENANCE_SCHEDULE_ENV_URL=${{ secrets.APP_MAINTENANCE_SCHEDULE_ENV_URL }} >> env_file
           echo APP_MATOMO_HOST=${{ secrets.APP_MATOMO_HOST }} >> env_file
@@ -42,3 +41,7 @@ jobs:
           cat env_file
       - run: |
           cat env_file | sed 's/./& /g'
+      - uses: actions/upload-artifact@master
+        with:
+          name: envFile
+          path: env_file
