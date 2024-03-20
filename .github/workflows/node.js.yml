@@ -120,7 +120,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
-            europeana/statistics-dashboard-ui:${{PROJECT_VERSION}}
+            europeana/statistics-dashboard-ui:${{ env.PROJECT_VERSION }}
           #type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build and push
