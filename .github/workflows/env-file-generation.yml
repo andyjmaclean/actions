@@ -7,11 +7,6 @@ on:
         description: 'Environment to deploy to'
         required: true
         default: 'test'
-        type: choice
-        options:
-        - test
-        - acceptance
-        - production
 jobs:
   create-env-file:
     runs-on: ubuntu-latest
