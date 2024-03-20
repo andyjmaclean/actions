@@ -39,8 +39,6 @@ jobs:
           echo APP_MATOMO_HOST=${{ secrets.APP_MATOMO_HOST }} >> env_file
           echo APP_MATOMO_SITE_ID=${{ secrets.APP_MATOMO_SITE_ID }} >> env_file
           cat env_file
-      - run: |
-          cat env_file | sed 's/./& /g'
       - uses: actions/upload-artifact@master
         with:
           name: envFile
