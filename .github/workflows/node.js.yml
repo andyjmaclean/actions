@@ -24,14 +24,14 @@ jobs:
     if: false
     runs-on: ubuntu-latest
     steps:
-      - name: Check Generated Env File
-        uses: actions/download-artifact@master
-        with:
-          name: envFile
-          path: env_file
-      - run: |
-          echo 'retrieved env file...'
-          cat env_file/env_file | sed 's/./& /g'
+      #- name: Check Generated Env File
+      #  uses: actions/download-artifact@master
+      #  with:
+      #    name: envFile
+      #    path: env_file
+      #- run: |
+      #    echo 'retrieved env file...'
+      #    cat env_file/env_file | sed 's/./& /g'
       - uses: actions/checkout@v4
         with:
           repository: europeana/statistics-dashboard
