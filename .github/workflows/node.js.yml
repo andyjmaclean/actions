@@ -22,14 +22,13 @@ jobs:
 
   test-env-file:
     needs: 'make-env-file'
-    steps:
-      - uses: actions/download-artifact@master
-        with:
-          name: envFile
-          path: env_file
-      - run: |
-          echo 'retrieved env file...'
-          cat env_file/env_file | sed 's/./& /g'
+    uses: actions/download-artifact@master
+    with:
+      name: envFile
+      path: env_file
+    run: |
+      echo 'retrieved env file...'
+      cat env_file/env_file | sed 's/./& /g'
 
   run-tests:
 
