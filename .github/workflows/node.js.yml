@@ -145,11 +145,11 @@ jobs:
           images: andyjmaclean/statistics-dashboard
       - run: echo ${{ steps.meta.outputs.tags }}
       - run: |
-        echo 'BEFORE'
-        echo ${{ github.sha }}
+          echo 'BEFORE'
+          echo ${{ github.sha }}
       - uses: actions/checkout@v4
         with:
           repository: europeana/statistics-dashboard
       - run: |
-        echo 'AFTER'
-        echo ${{ github.sha }}
+          echo 'AFTER'
+          echo ${{ github.sha }}
