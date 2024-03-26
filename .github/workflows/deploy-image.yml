@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: env
-      #- uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       #  #with:
       #  #  repository: europeana/statistics-dashboard
       - run: |
@@ -37,7 +37,7 @@ jobs:
           APP_IMAGE: ${{ inputs.docker_image_name }}
       - run: ls -l
       - run: cat deployment.yaml
-      #- uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       #- name: replace app settings
       #  run: |
