@@ -1,4 +1,4 @@
-name: Deploy Stats Dashboard
+name: Deploy Image
 run-name: ${{ github.actor }} is deploying the stats-dash
 on:
   workflow_call:
@@ -7,11 +7,12 @@ on:
         description: 'Target Environment'
         required: true
         default: 'test'
-        type: choice
-        options:
-        - test
-        - acceptance
-        - production
+        type: string
+        #type: choice
+        #options:
+        #- test
+        #- acceptance
+        #- production
       docker_image_name:
         description: 'Docker image (url)'
         type: string
