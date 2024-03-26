@@ -41,9 +41,6 @@ jobs:
       #    repository: europeana/statistics-dashboard
 
   # this works but can't use env
-  call-deploy-image:
-    uses: ./.github/workflows/deploy-image.yaml
-    secrets: inherit
 
   make-env-file:
     uses: ./.github/workflows/env-file-generation.yaml
@@ -170,3 +167,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  call-deploy-image:
+    if: github.event.inputs.run_build == 'true'
+    needs: build-docker-image
+    uses: ./.github/workflows/deploy-image.yaml
+    secrets: inherit
