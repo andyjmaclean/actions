@@ -23,6 +23,7 @@ jobs:
     env:
       TAG_NAME: ${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
     steps:
+      - uses: actions/checkout@v4
       - name: Call deploy script
         uses: ./.github/workflows/deploy-image.yml
         with:
