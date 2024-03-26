@@ -31,10 +31,10 @@ jobs:
 
   call-deploy-image:
     uses: ./.github/workflows/deploy-image.yml
-      with:
-        deploy_environment: ${{ github.event.inputs.deploy_environment }}
-        docker_image_name: europeana/statistics-dashboard-ui
-        secrets: inherit
+    with:
+      deploy_environment: ${{ github.event.inputs.deploy_environment }}
+      docker_image_name: europeana/statistics-dashboard-ui
+    secrets: inherit
 
   make-env-file:
     uses: ./.github/workflows/env-file-generation.yml
