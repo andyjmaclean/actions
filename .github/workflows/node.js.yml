@@ -19,9 +19,11 @@ jobs:
 
   call-deploy-image:
     uses: ./.github/workflows/deploy-image.yml
+    env:
+      TAG_NAME: ${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
     with:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
-      docker_image_name: europeana/statistics-dashboard-ui:${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
+      docker_image_name: europeana/statistics-dashboard-ui:${{ env.TAG_NAME }}
     secrets: inherit
 
   make-env-file:
