@@ -14,7 +14,7 @@ on:
         - test
         - acceptance
         - production
-    tag_name:
+      tag_name:
         description: 'Git tag to add'
         type: string
 jobs:
@@ -131,6 +131,7 @@ jobs:
           PROJECT_VERSION: ${{ secrets.PROJECT_VERSION }}
         with:
           images: andyjmaclean/statistics-dashboard
+          #images: ${{ GITHUB_REPOSITORY }}
           tags: |
             type=schedule
             type=ref,event=branch
