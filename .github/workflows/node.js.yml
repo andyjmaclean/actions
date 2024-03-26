@@ -24,17 +24,17 @@ jobs:
     env:
       TAG_NAME: ${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          repository: europeana/statistics-dashboard
+      #- uses: actions/checkout@v4
+      #  with:
+      #    repository: europeana/statistics-dashboard
       - uses: ./.github/workflows/deploy-image.yml
         with:
           deploy_environment: ${{ github.event.inputs.deploy_environment }}
           docker_image_name: europeana/statistics-dashboard-ui
           secrets: inherit
-      - uses: actions/checkout@v4
-        with:
-          repository: europeana/statistics-dashboard
+      #- uses: actions/checkout@v4
+      #  with:
+      #    repository: europeana/statistics-dashboard
 
   # this works but can't use env
   #call-deploy-image:
