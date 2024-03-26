@@ -31,8 +31,10 @@ jobs:
           tokenPrefix: '#{'
           tokenSuffix: '}#'
           files: '["**/*_tokenized.yaml"]'
-
+        env:
+          APP_IMAGE: {{ inputs.docker_image_name }}
       - run: ls -l
+      - run: cat deployment.yaml
 
       #- name: replace app settings
       #  run: |
