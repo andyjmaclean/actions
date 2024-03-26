@@ -24,7 +24,7 @@ jobs:
           echo ${{ inputs.deploy_environment }}
           echo ${{ inputs.docker_image_name }}
 
-      - run: cat deployment.yml
+      - run: cat deployment.yaml
       - name: Inject Variables
         uses: cschleiden/replace-tokens@v1
         with:
@@ -32,7 +32,7 @@ jobs:
           tokenSuffix: '}#'
           files: '["**/*_tokenized.yaml"]'
 
-      - run: cat deployment_tokenized.yml
+      - run: cat deployment_tokenized.yaml
 
       #- name: replace app settings
       #  run: |
