@@ -15,7 +15,6 @@ on:
 
 jobs:
   log-inputs:
-    runs-on: ubuntu-latest
     steps:
       - run: |
           echo 'Input check'
