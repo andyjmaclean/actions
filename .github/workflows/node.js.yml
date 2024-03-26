@@ -25,7 +25,7 @@ jobs:
         with:
           deploy_environment: ${{ github.event.inputs.deploy_environment }}
           docker_image_name: europeana/statistics-dashboard-ui:$TAG_NAME
-        secrets: inherit
+          secrets: inherit
 
   make-env-file:
     uses: ./.github/workflows/env-file-generation.yml
