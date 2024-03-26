@@ -1,31 +1,12 @@
 name: Deploy Image
 run-name: ${{ github.actor }} is deploying the stats-dash
-on:
-  workflow_call:
-    inputs:
-      deploy_environment:
-        description: 'Environment to deploy to'
-        required: true
-        default: 'test'
-        type: string
-      docker_image_name:
-        description: 'Docker image (url)'
-        type: string
-        required: true
-
+on: workflow_call
 jobs:
   deploy-image:
     runs-on: ubuntu-latest
     steps:
       - run: env
       - uses: actions/checkout@v4
-      #  #with:
-      #  #  repository: europeana/statistics-dashboard
-      - run: |
-          echo 'Input check'
-          echo ${{ inputs.deploy_environment }}
-          echo ${{ inputs.docker_image_name }}
-
       - run: cat deployment.yaml
       - name: Inject Variables
         uses: cschleiden/replace-tokens@v1
@@ -34,7 +15,7 @@ jobs:
           tokenSuffix: '}#'
           files: '["**/*deployment.yaml"]'
         env:
-          APP_IMAGE: the-repo${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
+          APP_IMAGE: europeana/statistics-dashboard:${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
       - run: ls -l
       - run: cat deployment.yaml
       - uses: actions/checkout@v4
