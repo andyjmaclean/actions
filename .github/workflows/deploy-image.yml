@@ -19,5 +19,5 @@ jobs:
     steps:
       - run: |
           echo 'Input check'
-          echo ${ github.event.inputs.deploy_environment }
+          echo ${ inputs.deploy_environment }
       #echo ${ inputs.docker_image_name }
