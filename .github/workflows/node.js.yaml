@@ -39,11 +39,11 @@ jobs:
 
   # this works but can't use env
   call-deploy-image:
-    uses: ./.github/workflows/deploy-image.yml
+    uses: ./.github/workflows/deploy-image.yaml
     secrets: inherit
 
   make-env-file:
-    uses: ./.github/workflows/env-file-generation.yml
+    uses: ./.github/workflows/env-file-generation.yaml
     with:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
     secrets: inherit
