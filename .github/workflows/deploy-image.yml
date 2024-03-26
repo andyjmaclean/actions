@@ -30,11 +30,12 @@ jobs:
         with:
           tokenPrefix: '#{'
           tokenSuffix: '}#'
-          files: '["**/*.yaml"]'
+          files: '["deployment.yaml"]'
         env:
           APP_IMAGE: ${{ inputs.docker_image_name }}
       - run: ls -l
       - run: cat deployment.yaml
+      - uses: actions/checkout@v4
 
       #- name: replace app settings
       #  run: |
