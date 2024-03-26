@@ -18,6 +18,7 @@ on:
         type: string
 jobs:
   call-deploy-image:
+    runs-on: ubuntu-latest
     env:
       TAG_NAME: ${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
     steps:
