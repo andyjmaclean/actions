@@ -19,13 +19,12 @@ jobs:
 
   call-deploy-image:
     uses: ./.github/workflows/deploy-image.yml
+    env:
+      IMG_PARAM: ${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
     with:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
       docker_image_name: |
-        europeana/statistics-dashboard-ui:${{
-         github.event.inputs.tag_name ?
-         github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
-    #secrets: inherit
+        europeana/statistics-dashboard-ui:${{ env.IMG_PARAM }}
 
   make-env-file:
     uses: ./.github/workflows/env-file-generation.yml
