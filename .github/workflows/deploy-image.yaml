@@ -20,7 +20,7 @@ jobs:
           MAX_REPLICAS: '4'
           MIN_REPLICAS: '2'
           UTILISATION_AVERAGE_PERCENT: '75'
-      - run: ls -l
+      - run: ls -l deployment/${{ github.event.inputs.deploy_environment }}
       - run: cat deployment/${{ github.event.inputs.deploy_environment }}/deployment.yaml
       - run: cat deployment/${{ github.event.inputs.deploy_environment }}/hpa.yaml
       - uses: actions/checkout@v4
