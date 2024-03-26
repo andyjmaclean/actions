@@ -15,7 +15,7 @@ on:
 jobs:
 
   call-deploy-image:
-    uses: ./.github/workflows/deploy-image.yml@master
+    uses: ./.github/workflows/deploy-image.yml
     with:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
       docker_image_name: ${{ 'image name here' }}
