@@ -1,7 +1,7 @@
 name: Deploy Stats Dashboard
 run-name: ${{ github.actor }} is deploying the stats-dash
 on:
-  [workflow_call, workflow_dispatch]:
+  [workflow_call]:
     inputs:
       deploy_environment:
         description: 'Target Environment'
