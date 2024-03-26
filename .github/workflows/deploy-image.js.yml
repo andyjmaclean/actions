@@ -6,8 +6,8 @@ on:
       deploy_environment:
         description: 'Target Environment'
         required: true
-        default: 'test'
         type: string
+        #default: 'test'
         #type: choice
         #options:
         #- test
@@ -16,13 +16,13 @@ on:
       docker_image_name:
         description: 'Docker image (url)'
         type: string
+        required: true
 
 jobs:
-
   log-inputs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo Input check
+          echo 'Input check'
           echo ${deploy_environment}
           echo ${docker_image_name}
