@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: env
+      - uses: actions/checkout@v4
       - run: |
           echo 'Input check'
           echo ${{ inputs.deploy_environment }}
