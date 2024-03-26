@@ -1,5 +1,7 @@
 name: Build & Test Stats Dashboard
 run-name: ${{ github.actor }} is building / testing the stats-dash
+env:
+  TAG_NAME: ${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
 on:
   workflow_dispatch:
     inputs:
@@ -16,9 +18,6 @@ on:
         description: 'Git tag to add'
         type: string
 jobs:
-  env:
-    TAG_NAME: ${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
-
   call-deploy-image:
     uses: ./.github/workflows/deploy-image.yml
     with:
