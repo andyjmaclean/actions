@@ -35,7 +35,7 @@ jobs:
           files: '["**/*deployment.yaml"]'
         env:
           TAG_NAME: ${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
-          APP_IMAGE: the-repo$TAG_NAME
+          APP_IMAGE: the-repo${{ TAG_NAME }}
       - run: ls -l
       - run: cat deployment.yaml
       - uses: actions/checkout@v4
