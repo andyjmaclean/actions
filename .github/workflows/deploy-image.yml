@@ -17,6 +17,7 @@ jobs:
   deploy-image:
     runs-on: ubuntu-latest
     steps:
+      - run: env
       - run: |
           echo 'Input check'
           echo ${{ inputs.deploy_environment }}
