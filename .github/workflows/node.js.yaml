@@ -1,5 +1,5 @@
 name: Build & Test Stats Dashboard
-run-name: ${{ github.actor }} is ${{ github.event.inputs.run_build && 'building and deploying' || 'deploying' }} ${{ github.event.inputs.deploy_environment }} 
+run-name: ${{ github.actor }} is ${{ [ github.event.inputs.run_build ] && echo 'building and deploying' || echo 'deploying' }} ${{ github.event.inputs.deploy_environment }} 
 on:
   workflow_dispatch:
     inputs:
