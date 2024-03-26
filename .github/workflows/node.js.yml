@@ -19,12 +19,13 @@ on:
 jobs:
 
   # this doesn't work but can (probably) use env
+  # Can't find 'action.yml', 'action.yaml' or 'Dockerfile'
   call-deploy-image:
     runs-on: ubuntu-latest
     env:
       TAG_NAME: ${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
     steps:
-      - uses: actions/checkout@v4
+      #- uses: actions/checkout@v4
       #  with:
       #    repository: europeana/statistics-dashboard
       - uses: ./.github/workflows/deploy-image.yml
@@ -32,7 +33,7 @@ jobs:
           deploy_environment: ${{ github.event.inputs.deploy_environment }}
           docker_image_name: europeana/statistics-dashboard-ui
           secrets: inherit
-      - uses: actions/checkout@v4
+      #- uses: actions/checkout@v4
       #  with:
       #    repository: europeana/statistics-dashboard
 
@@ -76,8 +77,8 @@ jobs:
           echo 'retrieved env file...'
           cat env_file/env_file | sed 's/./& /g'
       - uses: actions/checkout@v4
-        #with:
-        #  repository: europeana/statistics-dashboard
+        with:
+          repository: europeana/statistics-dashboard
       - uses: actions/setup-node@v4
         with:
           node-version: '18.18.0'
