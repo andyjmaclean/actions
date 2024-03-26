@@ -30,7 +30,7 @@ jobs:
         with:
           tokenPrefix: '#{'
           tokenSuffix: '}#'
-          files: '["**/*_tokenized.yaml"]'
+          files: '["**/*.yaml"]'
         env:
           APP_IMAGE: ${{ inputs.docker_image_name }}
       - run: ls -l
