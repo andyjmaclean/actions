@@ -25,16 +25,16 @@ jobs:
           echo ${{ inputs.docker_image_name }}
 
       - run: cat deployment.yaml
-      - name: Inject Variables
-        uses: cschleiden/replace-tokens@v1
-        with:
-          tokenPrefix: '#{'
-          tokenSuffix: '}#'
-          files: '["deployment.yaml"]'
-        env:
-          APP_IMAGE: ${{ inputs.docker_image_name }}
-      - run: ls -l
-      - run: cat deployment.yaml
+      #- name: Inject Variables
+      #  uses: cschleiden/replace-tokens@v1
+      #  with:
+      #    tokenPrefix: '#{'
+      #    tokenSuffix: '}#'
+      #    files: '["deployment.yaml"]'
+      #  env:
+      #    APP_IMAGE: ${{ inputs.docker_image_name }}
+      #- run: ls -l
+      #- run: cat deployment.yaml
       - uses: actions/checkout@v4
 
       #- name: replace app settings
