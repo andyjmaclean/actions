@@ -1,5 +1,5 @@
 name: Build & Test Stats Dashboard
-run-name: ${{ github.actor }} is building ${{ github.event.inputs.deploy_environment }} 
+run-name: ${{ github.actor }} is ${{ [[ github.event.inputs.run_build ]] && 'building and deploying' || 'deploying' }} ${{ github.event.inputs.deploy_environment }} 
 on:
   workflow_dispatch:
     inputs:
@@ -15,6 +15,9 @@ on:
       tag_name:
         description: 'Git tag to add'
         type: string
+      run_build:
+        description: 'Flag if docker image should be re-built'
+        default: false
 jobs:
 
   # this doesn't work but can (probably) use env

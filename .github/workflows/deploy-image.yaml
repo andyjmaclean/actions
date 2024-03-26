@@ -7,8 +7,8 @@ jobs:
     steps:
       - run: env
       - uses: actions/checkout@v4
-      - run: cat deployment/${{ github.event.inputs.deploy_environment }}/deployment.yaml
-      - run: cat deployment/${{ github.event.inputs.deploy_environment }}/hpa.yaml
+      #- run: cat deployment/${{ github.event.inputs.deploy_environment }}/deployment.yaml
+      #- run: cat deployment/${{ github.event.inputs.deploy_environment }}/hpa.yaml
       - name: Inject Variables 1
         uses: cschleiden/replace-tokens@v1
         with:
@@ -23,9 +23,4 @@ jobs:
       - run: ls -l deployment/${{ github.event.inputs.deploy_environment }}
       - run: cat deployment/${{ github.event.inputs.deploy_environment }}/deployment.yaml
       - run: cat deployment/${{ github.event.inputs.deploy_environment }}/hpa.yaml
-      - uses: actions/checkout@v4
-
-      #- name: replace app settings
-      #  run: |
-      #    rm appsettings.json
-      #    mv appsettings_tokenized.json appsettings.json
+      #- uses: actions/checkout@v4
