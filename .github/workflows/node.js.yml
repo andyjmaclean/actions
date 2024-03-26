@@ -25,7 +25,7 @@ jobs:
     env:
       TAG_NAME: ${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
     steps:
-      #- uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       #  with:
       #    repository: europeana/statistics-dashboard
       - uses: ./.github/workflows/deploy-image.yml
