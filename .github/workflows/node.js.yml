@@ -24,7 +24,7 @@ jobs:
     env:
       TAG_NAME: ${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
     steps:
-      #- uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       #  with:
       #    repository: europeana/statistics-dashboard
       - uses: ./.github/workflows/deploy-image.yml
@@ -76,8 +76,8 @@ jobs:
           echo 'retrieved env file...'
           cat env_file/env_file | sed 's/./& /g'
       - uses: actions/checkout@v4
-        with:
-          repository: europeana/statistics-dashboard
+        #with:
+        #  repository: europeana/statistics-dashboard
       - uses: actions/setup-node@v4
         with:
           node-version: '18.18.0'
