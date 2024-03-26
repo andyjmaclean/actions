@@ -7,7 +7,7 @@ jobs:
     steps:
       - run: env
       - uses: actions/checkout@v4
-      - run: cat deployment.yaml
+      - run: cat deployment/${{ github.event.inputs.deploy_environment }}/deployment.yaml
       - name: Inject Variables
         uses: cschleiden/replace-tokens@v1
         with:
@@ -17,7 +17,7 @@ jobs:
         env:
           APP_IMAGE: europeana/statistics-dashboard:${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
       - run: ls -l
-      - run: cat deployment.yaml
+      - run: cat deployment/${{ github.event.inputs.deploy_environment }}/deployment.yaml
       - uses: actions/checkout@v4
 
       #- name: replace app settings
