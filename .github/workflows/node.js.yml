@@ -29,18 +29,6 @@ jobs:
           docker_image_name: europeana/statistics-dashboard-ui:$TAG_NAME
           secrets: inherit
 
-  check-env-file:
-    needs: make-env-file
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check Generated Env File
-        uses: actions/download-artifact@master
-        with:
-          name: envFile
-          path: env_file
-
-
-
   make-env-file:
     uses: ./.github/workflows/env-file-generation.yml
     with:
