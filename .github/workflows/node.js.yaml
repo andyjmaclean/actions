@@ -1,6 +1,5 @@
 name: Build & Test Stats Dashboard
-run-name: ${{ github.actor }} is building / testing the stats-dash
-
+run-name: ${{ github.actor }} is building ${{ github.event.inputs.deploy_environment }} 
 on:
   workflow_dispatch:
     inputs:
