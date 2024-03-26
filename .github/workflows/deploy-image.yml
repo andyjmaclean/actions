@@ -24,13 +24,12 @@ jobs:
           echo ${{ inputs.docker_image_name }}
 
       - run: cat deployment.yml
-
       - name: Inject Variables
-        uses: cschleiden/replace-tokens@v1
-          with:
-            tokenPrefix: '#{'
-            tokenSuffix: '}#'
-            files: '["**/*_tokenized.yaml"]'
+          uses: cschleiden/replace-tokens@v1
+            with:
+              tokenPrefix: '#{'
+              tokenSuffix: '}#'
+              files: '["**/*_tokenized.yaml"]'
 
       - run: cat deployment_tokenized.yml
 
