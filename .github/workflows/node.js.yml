@@ -14,6 +14,14 @@ on:
         - production
 jobs:
 
+  call-deploy-image:
+    uses: deploy-image.yml
+    with:
+      deploy_environment: ${{ github.event.inputs.deploy_environment }}
+      docker_image_name: ${{ 'image name here' }}
+    secrets: inherit
+
+
   make-env-file:
     uses: andyjmaclean/actions/.github/workflows/env-file-generation.yml@master
     with:
