@@ -17,16 +17,29 @@ on:
         description: 'Git tag to add'
         type: string
 jobs:
+
   call-deploy-image:
     runs-on: ubuntu-latest
     env:
       TAG_NAME: ${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
     steps:
-      - uses: ./.github/workflows/deploy-image.yml
+      - name: Call deploy script
         with:
           deploy_environment: ${{ github.event.inputs.deploy_environment }}
           docker_image_name: europeana/statistics-dashboard-ui:$TAG_NAME
           secrets: inherit
+
+  check-env-file:
+    needs: make-env-file
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Generated Env File
+        uses: actions/download-artifact@master
+        with:
+          name: envFile
+          path: env_file
+
+
 
   make-env-file:
     uses: ./.github/workflows/env-file-generation.yml
