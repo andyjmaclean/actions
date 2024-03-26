@@ -22,5 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
+          echo Input check
           echo ${deploy_environment}
           echo ${docker_image_name}
