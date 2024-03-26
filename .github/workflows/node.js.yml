@@ -30,9 +30,9 @@ jobs:
   #        secrets: inherit
 
   call-deploy-image:
-    uses: ./.github/workflows/deploy-image.yml
     env:
       TAG_NAME: 'xxxx'
+    uses: ./.github/workflows/deploy-image.yml
     with:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
       docker_image_name: europeana/statistics-dashboard-ui
