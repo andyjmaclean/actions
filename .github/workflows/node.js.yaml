@@ -190,10 +190,10 @@ jobs:
 
   call-deploy-image:
     if: |
+      always() && !needs['run-tests'].result == 'failure'
     #always() && needs['run-sonar'].result == 'success'
-    #always() && needs['run-sonar'].result == 'success' && needs['run-sonar'].result == 'success'
-      always() && !contains(needs.*.result, 'failure')
+    # always() && !contains(needs.*.result, 'failure')
     # every one of the dependent jobs is skipped unless the "run_build" input is true
-    needs: [run-sonar, make-env-file]
+    needs: [run-tests, run-sonar, make-env-file]
     uses: ./.github/workflows/deploy-image.yaml
     secrets: inherit
