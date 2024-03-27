@@ -62,6 +62,7 @@ jobs:
           cat env_file/env_file | sed 's/./& /g'
 
   run-tests:
+    if: ${{ github.event.inputs.run_build == 'true' }}
     needs: make-env-file
     runs-on: ubuntu-latest
     steps:
