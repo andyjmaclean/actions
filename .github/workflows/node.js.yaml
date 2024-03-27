@@ -51,7 +51,8 @@ jobs:
 
   run-sonar:
     if: ${{ github.event.inputs.run_build == 'true' }}
-    needs: [push-docker-image, run-tests]
+    #needs: [push-docker-image, run-tests]
+    needs: [run-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Get Project Source
@@ -179,6 +180,7 @@ jobs:
 
   call-deploy-image:
     if: always() && !contains(needs.*.result, 'failure')
-    needs: [run-sonar, make-env-file]
+    #needs: [run-sonar, make-env-file]
+    needs: [push-docker-image, make-env-file]
     uses: ./.github/workflows/deploy-image.yaml
     secrets: inherit
