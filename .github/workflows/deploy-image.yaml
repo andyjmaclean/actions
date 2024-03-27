@@ -7,8 +7,6 @@ jobs:
     steps:
       - run: env
       - uses: actions/checkout@v4
-      #- run: cat deployment/${{ github.event.inputs.deploy_environment }}/deployment.yaml
-      #- run: cat deployment/${{ github.event.inputs.deploy_environment }}/hpa.yaml
       - name: Inject Variables 1
         uses: cschleiden/replace-tokens@v1
         with:
@@ -23,7 +21,6 @@ jobs:
       - run: ls -l deployment/${{ github.event.inputs.deploy_environment }}
       - run: cat deployment/${{ github.event.inputs.deploy_environment }}/deployment.yaml
       - run: cat deployment/${{ github.event.inputs.deploy_environment }}/hpa.yaml
-      #- uses: actions/checkout@v4
 
       - name: Set the Kubernetes context
         uses: azure/k8s-set-context@v2
@@ -41,10 +38,11 @@ jobs:
           namespace: default
           manifests: |
             deployment/${{ github.event.inputs.deploy_environment }}/deployment.yaml
-            deployment/${{ github.event.inputs.deploy_environment }}/ingress.yaml
-            deployment/${{ github.event.inputs.deploy_environment }}/service.yaml
-            deployment/${{ github.event.inputs.deploy_environment }}/kustomization.yaml
             deployment/${{ github.event.inputs.deploy_environment }}/hpa.yaml
+            deployment/${{ github.event.inputs.deploy_environment }}/ingress.yaml
+            deployment/${{ github.event.inputs.deploy_environment }}/kustomization.yaml
+            deployment/${{ github.event.inputs.deploy_environment }}/statistics-dashboard-ui-service.yaml
+          # deployment/${{ github.event.inputs.deploy_environment }}/nginx.conf
           images: |
             ${{ env.APP_IMAGE }}
         env:
