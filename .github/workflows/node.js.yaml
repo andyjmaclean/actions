@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       deploy_environment:
-        description: 'Environment to deploy to'
+        description: 'target environment'
         required: true
         default: 'test'
         type: choice
@@ -13,10 +13,10 @@ on:
         - acceptance
         - production
       tag_name:
-        description: 'Docker Tag (defaults to secrets.PROJECT_VERSION if empty)'
+        description: 'tag (defaults to PROJECT_VERSION)'
         type: string
       run_build:
-        description: 'Flag if docker image should be re-built'
+        description: '(re)build docker image'
         default: false
         type: boolean
 jobs:
@@ -190,7 +190,9 @@ jobs:
 
   call-deploy-image:
     if: |
-      always() && needs['run-sonar'].result == 'success'
+    #always() && needs['run-sonar'].result == 'success'
+    #always() && needs['run-sonar'].result == 'success' && needs['run-sonar'].result == 'success'
+      always() && !contains(needs.*.result, 'failure')
     # every one of the dependent jobs is skipped unless the "run_build" input is true
     needs: [run-sonar, make-env-file]
     uses: ./.github/workflows/deploy-image.yaml
