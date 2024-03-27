@@ -62,11 +62,11 @@ jobs:
           cat env_file/env_file | sed 's/./& /g'
 
   run-tests:
-    if: github.event.inputs.run_build == 'true'
     needs: make-env-file
     runs-on: ubuntu-latest
     steps:
       - name: Check Generated Env File
+        if: github.event.inputs.run_build == 'true'
         uses: actions/download-artifact@master
         with:
           name: envFile
@@ -74,7 +74,8 @@ jobs:
       - run: |
           echo 'retrieved env file...'
           cat env_file/env_file | sed 's/./& /g'
-      - uses: actions/checkout@v4
+      - if: github.event.inputs.run_build == 'true'
+        uses: actions/checkout@v4
         with:
           repository: europeana/statistics-dashboard
       - uses: actions/setup-node@v4
@@ -93,11 +94,11 @@ jobs:
           path: ./lcov.info
 
   run-sonar:
-    if: github.event.inputs.run_build == 'true'
     needs: 'run-tests'
     runs-on: ubuntu-latest
     steps:
-      - name: Get Project Source
+      - if: github.event.inputs.run_build == 'true'
+        name: Get Project Source
         uses: actions/download-artifact@master
         with:
           name: appSource
@@ -122,10 +123,10 @@ jobs:
             -Dsonar.javascript.lcov.reportPaths=./lcov.info/lcov.info
 
   build-docker-image:
-    if: github.event.inputs.run_build == 'true'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - if: github.event.inputs.run_build == 'true'
+        name: Checkout
         uses: actions/checkout@v4
         with:
           repository: europeana/statistics-dashboard
@@ -173,6 +174,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   call-deploy-image:
-    needs: build-docker-image
+    needs: run-sonar
     uses: ./.github/workflows/deploy-image.yaml
     secrets: inherit
