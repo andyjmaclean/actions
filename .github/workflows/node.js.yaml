@@ -94,9 +94,21 @@ jobs:
           path: ./lcov.info
 
   run-sonar:
+    if: ${{ !github.event.inputs.run_build == 'true' }}
     needs: 'run-tests'
     runs-on: ubuntu-latest
     steps:
+      - name: Create flag
+        id: create_flag
+        run: |
+          echo "::set-output name=FLAG::$FLAG"
+
+      - name: Run-me if FLAG is true
+        if: steps.create_flag.outputs.FLAG == 'true'
+        run: |
+          # some logic to run if flag==true
+
+      #- if: ${{ !github.event.inputs.run_build == 'true' }}
       #- if: ${{ github.event.inputs.run_build == 'true' }}
       - name: Get Project Source
         uses: actions/download-artifact@master
@@ -174,6 +186,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   call-deploy-image:
+    if: always()
     needs: run-sonar
     uses: ./.github/workflows/deploy-image.yaml
     secrets: inherit
