@@ -32,7 +32,7 @@ jobs:
           # from https://nicwortel.nl/blog/2022/continuous-deployment-to-kubernetes-with-github-actions
           #   Replace <server-url> with the URL of the cluster's API server, which can be found using the following command:
           #   kubectl config view --minify -o 'jsonpath={.clusters[0].cluster.server}'
-          k8s-url: <server-url>
+          k8s-url: '<server-url>'
           k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
 
       - name: Deploy to the Kubernetes cluster
