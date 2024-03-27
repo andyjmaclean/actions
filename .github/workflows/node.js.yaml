@@ -136,6 +136,7 @@ jobs:
             -Dsonar.javascript.lcov.reportPaths=./lcov.info/lcov.info
 
   build-docker-image:
+    if: ${{ github.event.inputs.run_build == 'true' }}
     runs-on: ubuntu-latest
     steps:
       #- if: ${{ github.event.inputs.run_build == 'true' }}
