@@ -97,7 +97,7 @@ jobs:
 
   run-sonar:
     if: ${{ github.event.inputs.run_build == 'true' }}
-    needs: run-tests
+    needs: [build-docker-image, run-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Create flag
@@ -194,6 +194,6 @@ jobs:
     #always() && needs['run-sonar'].result == 'success'
     # always() && !contains(needs.*.result, 'failure')
     # every one of the dependent jobs is skipped unless the "run_build" input is true
-    needs: [run-tests, build-docker-image, make-env-file]
+    needs: [run-tests, make-env-file]
     uses: ./.github/workflows/deploy-image.yaml
     secrets: inherit
