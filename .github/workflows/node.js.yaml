@@ -95,15 +95,11 @@ jobs:
       - run: npm install
       - run: npm run dist-localised
 
+      #- run: mkdir tmp-dir && mv dist tmp-dir/ && mv tmp-dir dist
       - uses: actions/upload-artifact@master
         with:
           name: dist
-          path: dist_path
-      - uses: actions/upload-artifact@master
-        with:
-          name: appLcov
-          path: ./lcov.info
-
+          path: ./dist
 
       #- name: Build and push
       #  uses: docker/build-push-action@v5
@@ -134,12 +130,13 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: dist
-          path: dist_path
+          path: ./dist
 
 
       - run: |
           echo 'no dist yet:'
           ls -l
+          ls -l dist
 
 
       - name: Login to Docker Hub
