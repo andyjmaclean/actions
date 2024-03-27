@@ -94,7 +94,7 @@ jobs:
           path: ./lcov.info
 
   run-sonar:
-    if: ${{ !github.event.inputs.run_build == 'true' }}
+    if: ${{ github.event.inputs.run_build == 'true' }}
     needs: 'run-tests'
     runs-on: ubuntu-latest
     steps:
