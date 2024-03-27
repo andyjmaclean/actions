@@ -189,6 +189,7 @@ jobs:
 
   call-deploy-image:
     if: always()
-    needs: [make-env-file, run-sonar]
+    # every one of the dependent jobs is skipped unless the "run_build" input is true
+    needs: [make-env-file, run-sonar, build-docker-image]
     uses: ./.github/workflows/deploy-image.yaml
     secrets: inherit
