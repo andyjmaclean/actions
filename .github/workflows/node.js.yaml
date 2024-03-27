@@ -48,22 +48,22 @@ jobs:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
     secrets: inherit
 
-  check-env-file:
-    needs: make-env-file
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check Generated Env File
-        uses: actions/download-artifact@master
-        with:
-          name: envFile
-          path: env_file
-      - run: |
-          echo 'retrieved env file...'
-          cat env_file/env_file | sed 's/./& /g'
+  #check-env-file:
+  #  needs: make-env-file
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - name: Check Generated Env File
+  #      uses: actions/download-artifact@master
+  #      with:
+  #        name: envFile
+  #        path: env_file
+  #    - run: |
+  #        echo 'retrieved env file...'
+  #        cat env_file/env_file | sed 's/./& /g'
 
   run-tests:
     if: ${{ github.event.inputs.run_build == 'true' }}
-    needs: make-env-file
+    #needs: make-env-file
     runs-on: ubuntu-latest
     steps:
       #- if: ${{ github.event.inputs.run_build == 'true' }}
@@ -188,6 +188,6 @@ jobs:
 
   call-deploy-image:
     if: always()
-    needs: run-sonar
+    needs: [make-env-file, run-sonar]
     uses: ./.github/workflows/deploy-image.yaml
     secrets: inherit
