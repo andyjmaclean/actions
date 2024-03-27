@@ -65,8 +65,8 @@ jobs:
     needs: make-env-file
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ github.event.inputs.run_build == 'true' }}
-        name: Check Generated Env File
+      #- if: ${{ github.event.inputs.run_build == 'true' }}
+      - name: Check Generated Env File
         uses: actions/download-artifact@master
         with:
           name: envFile
@@ -74,8 +74,8 @@ jobs:
       - run: |
           echo 'retrieved env file...'
           cat env_file/env_file | sed 's/./& /g'
-      - if: ${{ github.event.inputs.run_build == 'true' }}
-        uses: actions/checkout@v4
+      #- if: ${{ github.event.inputs.run_build == 'true' }}
+      - uses: actions/checkout@v4
         with:
           repository: europeana/statistics-dashboard
       - uses: actions/setup-node@v4
@@ -97,8 +97,8 @@ jobs:
     needs: 'run-tests'
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ github.event.inputs.run_build == 'true' }}
-        name: Get Project Source
+      #- if: ${{ github.event.inputs.run_build == 'true' }}
+      - name: Get Project Source
         uses: actions/download-artifact@master
         with:
           name: appSource
@@ -125,8 +125,8 @@ jobs:
   build-docker-image:
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ github.event.inputs.run_build == 'true' }}
-        name: Checkout
+      #- if: ${{ github.event.inputs.run_build == 'true' }}
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           repository: europeana/statistics-dashboard
