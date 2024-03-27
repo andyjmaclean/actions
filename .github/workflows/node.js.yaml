@@ -67,14 +67,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       #- if: ${{ github.event.inputs.run_build == 'true' }}
-      - name: Check Generated Env File
-        uses: actions/download-artifact@master
-        with:
-          name: envFile
-          path: env_file
-      - run: |
-          echo 'retrieved env file...'
-          cat env_file/env_file | sed 's/./& /g'
+      #- name: Check Generated Env File
+      #  uses: actions/download-artifact@master
+      #  with:
+      #    name: envFile
+      #    path: env_file
+      #- run: |
+      #    echo 'retrieved env file...'
+      #    cat env_file/env_file | sed 's/./& /g'
       #- if: ${{ github.event.inputs.run_build == 'true' }}
       - uses: actions/checkout@v4
         with:
