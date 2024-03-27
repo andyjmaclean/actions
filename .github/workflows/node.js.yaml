@@ -65,8 +65,8 @@ jobs:
     needs: make-env-file
     runs-on: ubuntu-latest
     steps:
-      - name: Check Generated Env File
-        if: github.event.inputs.run_build == 'true'
+      - if: github.event.inputs.run_build == 'true'
+        name: Check Generated Env File
         uses: actions/download-artifact@master
         with:
           name: envFile
