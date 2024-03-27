@@ -1,5 +1,5 @@
-name: Build & Test Stats Dashboard
-run-name: ${{ github.actor }} is ${{ github.event.inputs.run_build == 'true' && 'building and deploying' || 'deploying' }} ${{ github.event.inputs.deploy_environment }}
+name: Build / Deployment
+run-name: ${{ github.actor }} is ${{ github.event.inputs.run_build == 'true' && 'building and deploying' || 'deploying' }} ${{ github.event.inputs.tag_name }} to ${{ github.event.inputs.deploy_environment }}
 on:
   workflow_dispatch:
     inputs:
@@ -20,62 +20,16 @@ on:
         default: false
         type: boolean
 jobs:
-
-  # this doesn't work but can (probably) use env
-  # Can't find 'action.yml', 'action.yaml' or 'Dockerfile'
-  #call-deploy-image:
-  #  runs-on: ubuntu-latest
-  #  env:
-  #    TAG_NAME: ${{ github.event.inputs.tag_name || secrets.PROJECT_VERSION }}
-  #  steps:
-  #    - uses: actions/checkout@v4
-      #  with:
-      #    repository: europeana/statistics-dashboard
-  #    - uses: ./.github/workflows/deploy-image.yml
-  #      with:
-  #        deploy_environment: ${{ github.event.inputs.deploy_environment }}
-  #        docker_image_name: europeana/statistics-dashboard-ui
-  #        secrets: inherit
-  #    - uses: actions/checkout@v4
-      #  with:
-      #    repository: europeana/statistics-dashboard
-
-  # this works but can't use env
-
   make-env-file:
     uses: ./.github/workflows/env-file-generation.yaml
     with:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
     secrets: inherit
 
-  #check-env-file:
-  #  needs: make-env-file
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - name: Check Generated Env File
-  #      uses: actions/download-artifact@master
-  #      with:
-  #        name: envFile
-  #        path: env_file
-  #    - run: |
-  #        echo 'retrieved env file...'
-  #        cat env_file/env_file | sed 's/./& /g'
-
   run-tests:
     if: ${{ github.event.inputs.run_build == 'true' }}
-    #needs: make-env-file
     runs-on: ubuntu-latest
     steps:
-      #- if: ${{ github.event.inputs.run_build == 'true' }}
-      #- name: Check Generated Env File
-      #  uses: actions/download-artifact@master
-      #  with:
-      #    name: envFile
-      #    path: env_file
-      #- run: |
-      #    echo 'retrieved env file...'
-      #    cat env_file/env_file | sed 's/./& /g'
-      #- if: ${{ github.event.inputs.run_build == 'true' }}
       - uses: actions/checkout@v4
         with:
           repository: europeana/statistics-dashboard
@@ -100,18 +54,6 @@ jobs:
     needs: [build-docker-image, run-tests]
     runs-on: ubuntu-latest
     steps:
-      - name: Create flag
-        id: create_flag
-        run: |
-          echo "::set-output name=FLAG::$FLAG"
-
-      - name: Run-me if FLAG is true
-        if: steps.create_flag.outputs.FLAG == 'true'
-        run: |
-          # some logic to run if flag==true
-
-      #- if: ${{ !github.event.inputs.run_build == 'true' }}
-      #- if: ${{ github.event.inputs.run_build == 'true' }}
       - name: Get Project Source
         uses: actions/download-artifact@master
         with:
@@ -140,7 +82,6 @@ jobs:
     if: ${{ github.event.inputs.run_build == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      #- if: ${{ github.event.inputs.run_build == 'true' }}
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -189,11 +130,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   call-deploy-image:
-    if: |
-      always() && !contains(needs.*.result, 'failure')
-    #always() && needs['run-sonar'].result == 'success'
-
-    # every one of the dependent jobs is skipped unless the "run_build" input is true
+    if: always() && !contains(needs.*.result, 'failure')
     needs: [run-sonar, make-env-file]
     uses: ./.github/workflows/deploy-image.yaml
     secrets: inherit
