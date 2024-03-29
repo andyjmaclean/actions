@@ -32,8 +32,8 @@ on:
 jobs:
   make-env-file:
     uses: ./.github/workflows/env-file-generation.yaml
-    with:
-      deploy_environment: ${{ github.event.inputs.deploy_environment }}
+    #with:
+    #  deploy_environment: ${{ github.event.inputs.deploy_environment }}
     secrets: inherit
 
   run-ci:
