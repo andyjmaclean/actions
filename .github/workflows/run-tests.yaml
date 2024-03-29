@@ -20,7 +20,7 @@ jobs:
 
       - name: close test-data server
         if: success() || failure()
-        run: "fuser -k 3001/tcp",
+        run: fuser -k 3001/tcp,
 
   run-accessibility-tests:
     if: ${{ github.event.inputs.run_build == 'true' }}
@@ -41,7 +41,7 @@ jobs:
 
       - name: close test-data server
         if: success() || failure()
-        run: "fuser -k 3001/tcp",
+        run: fuser -k 3001/tcp,
 
 
   run-unit-tests:
