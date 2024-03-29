@@ -1,13 +1,11 @@
 name: Build / Deployment
 run-name: ${{ github.actor }} is
-
   ${{ github.event.inputs.delete == 'true'
-        && 'deleting' || github.event.inputs.run_build == 'true'
-              && 'building and deploying' || 'deploying' }}
-
-
-  ${{ github.event.inputs.tag_name }} to ${{ github.event.inputs.deploy_environment }}
-
+    && 'deleting' || github.event.inputs.run_build == 'true'
+    && 'building and deploying' || 'deploying' }}
+    ${{ github.event.inputs.tag_name }}
+    ${{ github.event.inputs.delete == 'true' && 'from' || 'to' }}
+    ${{ github.event.inputs.deploy_environment }}
 on:
   workflow_dispatch:
     inputs:
