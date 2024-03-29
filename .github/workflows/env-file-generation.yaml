@@ -1,13 +1,12 @@
 name: '- (helper env file)'
 run-name: ${{ github.actor }} is generating an env_file
-on:
-  workflow_call:
-    inputs:
-      deploy_environment:
-        description: 'Environment to deploy to'
-        required: true
-        default: 'test'
-        type: string
+on: workflow_call
+  #  inputs:
+  #    deploy_environment:
+  #      description: 'Environment to deploy to'
+  #      required: true
+  #      default: 'test'
+  #      type: string
 jobs:
   create-env-file:
     runs-on: ubuntu-latest

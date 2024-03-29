@@ -1,0 +1,38 @@
+name: '- helper (testing)'
+on: workflow_call
+jobs:
+  run-cypress:
+    if: ${{ github.event.inputs.run_build == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: europeana/statistics-dashboard
+          ref: ${{ github.event.inputs.tag_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.18.0'
+      - run: npm install
+      - run: npm run test:e2e
+
+  run-accessibility-tests:
+    if: ${{ github.event.inputs.run_build == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: europeana/statistics-dashboard
+          ref: ${{ github.event.inputs.tag_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.18.0'
+      - run: npm install
+      - run: npm run test:accessibility
+
+  run-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          touch env_file

@@ -36,48 +36,37 @@ jobs:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
     secrets: inherit
 
-  run-cypress:
-    if: ${{ github.event.inputs.run_build == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          repository: europeana/statistics-dashboard
-          ref: ${{ github.event.inputs.tag_name }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '18.18.0'
-      - run: npm install
-      - run: npm run test:e2e
+  run-ci:
+    uses: ./.github/workflows/run-tests.yaml
 
-  run-tests:
-    if: ${{ github.event.inputs.run_build == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          repository: europeana/statistics-dashboard
-          ref: ${{ github.event.inputs.tag_name }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '18.18.0'
-      - run: npm install
-      - run: npm run test:dev
-      - run: cp coverage/**/lcov.info .
-      - uses: actions/upload-artifact@master
-        with:
-          name: appSource
-          path: src/app
-      - uses: actions/upload-artifact@master
-        with:
-          name: appLcov
-          path: ./lcov.info
+  #run-tests:
+  #  if: ${{ github.event.inputs.run_build == 'true' }}
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - name: Checkout
+  #      uses: actions/checkout@v4
+  #      with:
+  #        repository: europeana/statistics-dashboard
+  #        ref: ${{ github.event.inputs.tag_name }}
+  #    - uses: actions/setup-node@v4
+  #      with:
+  #        node-version: '18.18.0'
+  #    - run: npm install
+  #    - run: npm run test:dev
+  #    - run: cp coverage/**/lcov.info .
+  #    - uses: actions/upload-artifact@master
+  #      with:
+  #        name: appSource
+  #        path: src/app
+  #    - uses: actions/upload-artifact@master
+  #      with:
+  #        name: appLcov
+  #        path: ./lcov.info
 
   run-sonar:
     if: ${{ github.event.inputs.run_build == 'true' }}
-    needs: [run-tests, run-cypress]
+    #needs: [run-tests, run-cypress]
+    needs: [run-ci]
     runs-on: ubuntu-latest
     steps:
       - name: Get Project Source
