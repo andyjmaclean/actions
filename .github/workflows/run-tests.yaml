@@ -14,7 +14,13 @@ jobs:
         with:
           node-version: '18.18.0'
       - run: npm install
-      - run: npm run test:e2e
+
+      - run: npm run start:ci-data
+      - run: npm run cypress:run
+
+      - name: close test-data server
+        if: if: success() || failure()
+        run: "fuser -k 3001/tcp",
 
   run-accessibility-tests:
     if: ${{ github.event.inputs.run_build == 'true' }}
@@ -29,10 +35,35 @@ jobs:
         with:
           node-version: '18.18.0'
       - run: npm install
-      - run: npm run test:accessibility
+
+      - run: npm run start:ci-data
+      - run: cypress run --spec **/*a11y.cy.ts
+
+      - name: close test-data server
+        if: if: success() || failure()
+        run: "fuser -k 3001/tcp",
+
 
   run-unit-tests:
+    if: ${{ github.event.inputs.run_build == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          touch env_file
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: europeana/statistics-dashboard
+          ref: ${{ github.event.inputs.tag_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.18.0'
+      - run: npm install
+      - run: npm run test:dev
+      - run: cp coverage/**/lcov.info .
+      - uses: actions/upload-artifact@master
+        with:
+          name: appSource
+          path: src/app
+      - uses: actions/upload-artifact@master
+        with:
+          name: appLcov
+          path: ./lcov.info
