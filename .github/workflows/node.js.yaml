@@ -119,7 +119,8 @@ jobs:
     if: |
       ${{ github.event.inputs.run_build == 'false'
       || !(cancelled() || contains(needs.*.result, 'failure')) }}
-    needs: [build-dist, run-tests]
+    #needs: [build-dist, run-tests]
+    needs: [build-dist, run-ci]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
