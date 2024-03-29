@@ -1,4 +1,4 @@
-name: Env File Generation
+name: '- (helper env file)'
 run-name: ${{ github.actor }} is generating an env_file
 on:
   workflow_call:

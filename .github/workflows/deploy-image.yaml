@@ -1,4 +1,4 @@
-name: ' - helper (deploy image)'
+name: '- helper (image deployment)'
 on: workflow_call
 env:
   APP_IMAGE: europeana/statistics-dashboard:${{ github.event.inputs.tag_name || 'develop' }}

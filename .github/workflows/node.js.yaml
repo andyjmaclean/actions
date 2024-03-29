@@ -1,4 +1,4 @@
-name: Build / Deployment
+name: '* Build & Deployment'
 run-name: ${{ github.actor }} is
   ${{ github.event.inputs.delete == 'true'
     && 'deleting' || github.event.inputs.run_build == 'true'
