@@ -36,6 +36,21 @@ jobs:
       deploy_environment: ${{ github.event.inputs.deploy_environment }}
     secrets: inherit
 
+  run-cypress:
+    if: ${{ github.event.inputs.run_build == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: europeana/statistics-dashboard
+          ref: ${{ github.event.inputs.tag_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.18.0'
+      - run: npm install
+      - run: npm run test:e2e
+
   run-tests:
     if: ${{ github.event.inputs.run_build == 'true' }}
     runs-on: ubuntu-latest
@@ -62,7 +77,7 @@ jobs:
 
   run-sonar:
     if: ${{ github.event.inputs.run_build == 'true' }}
-    needs: [run-tests]
+    needs: [run-tests, run-cypress]
     runs-on: ubuntu-latest
     steps:
       - name: Get Project Source
@@ -112,7 +127,9 @@ jobs:
           path: ./dist
 
   push-docker-image:
-    if: ${{ github.event.inputs.run_build == 'false' || !contains(needs.*.result, 'failure') }}
+    if: |
+      ${{ github.event.inputs.run_build == 'false'
+      || !(cancelled() || contains(needs.*.result, 'failure')) }}
     needs: [build-dist, run-tests]
     runs-on: ubuntu-latest
     steps:
