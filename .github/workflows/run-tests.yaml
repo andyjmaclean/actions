@@ -19,7 +19,7 @@ jobs:
       - run: npm run cypress:run
 
       - name: close test-data server
-        if: if: success() || failure()
+        if: success() || failure()
         run: "fuser -k 3001/tcp",
 
   run-accessibility-tests:
@@ -40,7 +40,7 @@ jobs:
       - run: cypress run --spec **/*a11y.cy.ts
 
       - name: close test-data server
-        if: if: success() || failure()
+        if: success() || failure()
         run: "fuser -k 3001/tcp",
 
 
