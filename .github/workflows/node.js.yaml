@@ -46,77 +46,11 @@ jobs:
     uses: ./.github/workflows/run-tests.yaml
     secrets: inherit
 
-  #get-run-ci-outputs:
-  #  runs-on: ubuntu-latest
-  #  needs: run-ci
-  #  steps:
-  #    - run: |
-  #        echo "${{ needs['run-ci'].outputs.pass_unit }}"
-  #        echo "${{ needs['run-ci'].outputs.lcov }}"
-
-  #run-tests:
-  #  if: ${{ github.event.inputs.run_build == 'true' }}
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - name: Checkout
-  #      uses: actions/checkout@v4
-  #      with:
-  #        repository: europeana/statistics-dashboard
-  #        ref: ${{ github.event.inputs.tag_name }}
-  #    - uses: actions/setup-node@v4
-  #      with:
-  #        node-version: '18.18.0'
-  #    - run: npm install
-  #    - run: npm run test:dev
-  #    - run: cp coverage/**/lcov.info .
-  #    - uses: actions/upload-artifact@master
-  #      with:
-  #        name: appSource
-  #        path: src/app
-  #    - uses: actions/upload-artifact@master
-  #      with:
-  #        name: appLcov
-  #        path: ./lcov.info
-
-
   run-sonar:
     if: ${{ github.event.inputs.run_build == 'true' }}
     needs: [tests]
     uses: ./.github/workflows/run-sonar.yaml
     secrets: inherit
-
-      #- run: |
-      #    echo "${{ needs['test'].outputs.lcov }}"
-      #    echo "${{ needs['run-ci'].outputs.lcov }}"
-      #    echo "${{ needs['run-ci'].outputs.lcov }}" > lcov.info
-      #    cat lcov.info
-
-  #    - name: Get Project Source
-  #      uses: actions/download-artifact@master
-  #      with:
-  #        name: appSource
-  #        path: src/app
-
-  #    - name: Get Project LCOV
-  #      uses: actions/download-artifact@master
-  #      with:
-  #        name: appLcov
-  #        path: ./lcov.info
-
-  #    - name: SonarQube Scan
-  #      uses: sonarsource/sonarcloud-github-action@master
-  #      env:
-  #        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #      with:
-  #        args:
-  #          -Dsonar.host.url=https://sonarcloud.io
-  #          -Dsonar.organization=europeana
-  #          -Dsonar.projectKey=europeana_statistics-dashboard
-  #          -Dsonar.test.inclusions=**/*.spec.ts
-  #          -Dsonar.sources=src/app
-  #          -Dsonar.exclusions=src/**/_mocked/**
-  #          -Dsonar.javascript.lcov.reportPaths=./lcov.info/lcov.info
-          #-Dsonar.javascript.lcov.reportPaths=lcov.info
 
   build-dist:
     if: ${{ github.event.inputs.run_build == 'true' }}
@@ -146,8 +80,7 @@ jobs:
     #  || !(cancelled() || contains(needs.*.result, 'failure')) }}
 
     if: |
-      ${{ github.event.inputs.run_build == 'true'
-      && !cancelled() && !contains(needs.*.result, 'failure') }}
+      ${{ github.event.inputs.run_build == 'true' }}
 
     needs: [build-dist, tests]
     runs-on: ubuntu-latest
