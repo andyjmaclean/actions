@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "${{ needs['test'].outputs.pass_unit }}"
+          echo "${{ needs['test'].outputs.lcov }}"
       #    echo "${{ needs['run-ci'].outputs.lcov }}"
       #    echo "${{ needs['run-ci'].outputs.lcov }}" > lcov.info
       #    cat lcov.info
