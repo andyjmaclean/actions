@@ -1,22 +1,14 @@
 name: '- helper (unit testing)'
-on:
-  workflow_call:
-    outputs:
-      #pass_unit:
-      #  value: ${{ jobs['unit'].outputs.result }}
-      lcov:
-        description: "lcov report"
-        value: ${{ jobs['unit'].outputs.lcov }}
+on: workflow_call
 
 jobs:
-
   unit:
     #if: ${{ github.event.inputs.run_build == 'true' }}
     runs-on: ubuntu-latest
     # Map the job outputs to step outputs
-    outputs:
+    #outputs:
       #result: ${{ steps['run-unit-tests-step'].outputs.result }}
-      lcov: ${{ steps['collect-coverage-step'].outputs.lcov }}
+    #  lcov: ${{ steps['collect-coverage-step'].outputs.lcov }}
       #lcov: "fails at scan time"
     steps:
       - name: Checkout
@@ -28,8 +20,7 @@ jobs:
         with:
           node-version: '18.18.0'
       - run: npm install
-      - id: run-unit-tests-step
-        run: |
+      - run: |
           npm run test:dev
         #  echo result=$? >> $GITHUB_OUTPUT
         #  cp coverage/**/lcov.info .
@@ -47,50 +38,50 @@ jobs:
           name: appLcov
           path: ./lcov.info
 
-      - id: collect-coverage-step
-        run: |
-          cp coverage/**/lcov.info .
-          output="lcov=$(cat lcov.info)"
-          echo $output >> $GITHUB_OUTPUT
-          echo 'set output in collect cov step '
-          echo $output
+      #- id: collect-coverage-step
+      #  run: |
+      #    cp coverage/**/lcov.info .
+      #    output="lcov=$(cat lcov.info)"
+      #    echo $output >> $GITHUB_OUTPUT
+      #    echo 'set output in collect cov step '
+      #    echo $output
 
-  run-sonar:
-    name: (tests) sonar disabled
-    if: false
+  #run-sonar:
+  #  name: (tests) sonar disabled
+  #  if: false
     #if: ${{ github.event.inputs.run_build == 'true' }}
     #needs: [run-tests, run-cypress]
-    needs: [unit]
-    runs-on: ubuntu-latest
-    steps:
+  #  needs: [unit]
+  #  runs-on: ubuntu-latest
+  #  steps:
       #- run: |
       #    echo "${{ needs['run-ci'].outputs.pass_unit }}"
       #    echo "${{ needs['run-ci'].outputs.lcov }}"
       #    echo "${{ needs['run-ci'].outputs.lcov }}" > lcov.info
       #    cat lcov.info
-      - name: Get Project Source
-        uses: actions/download-artifact@master
-        with:
-          name: appSource
-          path: src/app
+  #    - name: Get Project Source
+  #      uses: actions/download-artifact@master
+  #      with:
+  #        name: appSource
+  #        path: src/app
 
-      - name: Get Project LCOV
-        uses: actions/download-artifact@master
-        with:
-          name: appLcov
-          path: ./lcov.info
+  #    - name: Get Project LCOV
+  #      uses: actions/download-artifact@master
+  #      with:
+  #        name: appLcov
+  #        path: ./lcov.info
 
-      - name: SonarQube Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args:
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.organization=europeana
-            -Dsonar.projectKey=europeana_statistics-dashboard
-            -Dsonar.test.inclusions=**/*.spec.ts
-            -Dsonar.sources=src/app
-            -Dsonar.exclusions=src/**/_mocked/**
-            -Dsonar.javascript.lcov.reportPaths=./lcov.info/lcov.info
+  #    - name: SonarQube Scan
+  #      uses: sonarsource/sonarcloud-github-action@master
+  #      env:
+  #        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #      with:
+  #        args:
+  #          -Dsonar.host.url=https://sonarcloud.io
+  #          -Dsonar.organization=europeana
+  #          -Dsonar.projectKey=europeana_statistics-dashboard
+  #          -Dsonar.test.inclusions=**/*.spec.ts
+  #          -Dsonar.sources=src/app
+  #          -Dsonar.exclusions=src/**/_mocked/**
+  #          -Dsonar.javascript.lcov.reportPaths=./lcov.info/lcov.info
           #-Dsonar.javascript.lcov.reportPaths=lcov.info
