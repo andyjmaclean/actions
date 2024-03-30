@@ -1,67 +1,22 @@
-name: '- helper (testing)'
+name: '- helper (unit testing)'
 on:
   workflow_call:
     outputs:
       pass_unit:
-        description: "Good enough?"
-        value: ${{ jobs['run-unit-tests'].outputs.result }}
+        value: ${{ jobs['unit'].outputs.result }}
+      lcov:
+        description: "report"
+        value: ${{ jobs['unit'].outputs.lcov }}
 
 jobs:
-  run-cypress:
-    if: ${{ github.event.inputs.run_build == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          repository: europeana/statistics-dashboard
-          ref: ${{ github.event.inputs.tag_name }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '18.18.0'
-      - run: npm install
-      - name: Run Cypress Tests
-        run: |
-          ((npm run start:ci-data & echo 'started test-data server')
-          && sleep 15) & (npm run cypress:run)
-      - name: close test-data server
-        if: success() || failure()
-        run: |
-          fuser -k 3001/tcp
-      - name: close test-data server
-        if: success() || failure()
-        run: fuser -k 3001/tcp,
 
-  run-accessibility-tests:
-    if: ${{ github.event.inputs.run_build == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          repository: europeana/statistics-dashboard
-          ref: ${{ github.event.inputs.tag_name }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '18.18.0'
-      - run: npm install
-
-      - name: Run Cypress Tests
-        run: |
-          ((npm run start:ci-data & echo 'started test-data server')
-          && sleep 15) & (npm run cypress:ci-accessibility)
-
-      - name: close test-data server
-        if: success() || failure()
-        run: |
-          fuser -k 3001/tcp
-
-  run-unit-tests:
+  unit:
     if: ${{ github.event.inputs.run_build == 'true' }}
     runs-on: ubuntu-latest
     # Map the job outputs to step outputs
     outputs:
-      result: ${{ steps['run-unit-tests-step'].outputs }}
+      result: ${{ steps['run-unit-tests-step'].outputs.result }}
+      lcov: "fails at scan time"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -73,13 +28,62 @@ jobs:
           node-version: '18.18.0'
       - run: npm install
       - id: run-unit-tests-step
-        run: npm run test:dev >> $GITHUB_OUTPUT
-      - run: cp coverage/**/lcov.info .
+        run: |
+          npm run test:dev
+          echo result=$? >> $GITHUB_OUTPUT
+          cp coverage/**/lcov.info .
+
       - uses: actions/upload-artifact@master
         with:
           name: appSource
           path: src/app
+
       - uses: actions/upload-artifact@master
         with:
           name: appLcov
           path: ./lcov.info
+
+
+      #- id: collect-coverage
+      #  run: |
+      #    cp coverage/**/lcov.info .
+      #    output="lcov=$(cat lcov.info)"
+      #    echo $output >> $GITHUB_OUTPUT
+
+  run-sonar:
+    if: ${{ github.event.inputs.run_build == 'true' }}
+    #needs: [run-tests, run-cypress]
+    needs: [unit]
+    runs-on: ubuntu-latest
+    steps:
+      #- run: |
+      #    echo "${{ needs['run-ci'].outputs.pass_unit }}"
+      #    echo "${{ needs['run-ci'].outputs.lcov }}"
+      #    echo "${{ needs['run-ci'].outputs.lcov }}" > lcov.info
+      #    cat lcov.info
+      - name: Get Project Source
+        uses: actions/download-artifact@master
+        with:
+          name: appSource
+          path: src/app
+
+      - name: Get Project LCOV
+        uses: actions/download-artifact@master
+        with:
+          name: appLcov
+          path: ./lcov.info
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args:
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.organization=europeana
+            -Dsonar.projectKey=europeana_statistics-dashboard
+            -Dsonar.test.inclusions=**/*.spec.ts
+            -Dsonar.sources=src/app
+            -Dsonar.exclusions=src/**/_mocked/**
+            -Dsonar.javascript.lcov.reportPaths=./lcov.info/lcov.info
+          #-Dsonar.javascript.lcov.reportPaths=lcov.info
