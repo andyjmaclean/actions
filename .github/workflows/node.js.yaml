@@ -1,5 +1,5 @@
 name: '* Build & Deployment'
-run-name: ${{ github.actor }} is
+run-name:
   ${{ github.event.inputs.delete == 'true'
     && 'deleting' || github.event.inputs.run_build == 'true'
     && 'building and deploying' || 'deploying' }}
@@ -40,18 +40,18 @@ jobs:
     name: 'e2e'
     uses: ./.github/workflows/run-tests-e2e.yaml
 
-  run-ci:
-    name: 'tests'
+  tests:
+    if: ${{ github.event.inputs.run_build == 'true' }}
     uses: ./.github/workflows/run-tests.yaml
     secrets: inherit
 
-  get-run-ci-outputs:
-    runs-on: ubuntu-latest
-    needs: run-ci
-    steps:
-      - run: |
-          echo "${{ needs['run-ci'].outputs.pass_unit }}"
-          echo "${{ needs['run-ci'].outputs.lcov }}"
+  #get-run-ci-outputs:
+  #  runs-on: ubuntu-latest
+  #  needs: run-ci
+  #  steps:
+  #    - run: |
+  #        echo "${{ needs['run-ci'].outputs.pass_unit }}"
+  #        echo "${{ needs['run-ci'].outputs.lcov }}"
 
   #run-tests:
   #  if: ${{ github.event.inputs.run_build == 'true' }}
@@ -77,42 +77,43 @@ jobs:
   #        name: appLcov
   #        path: ./lcov.info
 
-  xrun-sonar:
-    if: false &&  ${{ github.event.inputs.run_build == 'true' }}
-    #needs: [run-tests, run-cypress]
-    needs: [run-ci]
-    runs-on: ubuntu-latest
-    steps:
+  #xrun-sonar:
+  #  if: ${{ github.event.inputs.run_build == 'true' }}
+  #  needs: [run-ci]
+  #  runs-on: ubuntu-latest
+  #  steps:
+
       #- run: |
       #    echo "${{ needs['run-ci'].outputs.pass_unit }}"
       #    echo "${{ needs['run-ci'].outputs.lcov }}"
       #    echo "${{ needs['run-ci'].outputs.lcov }}" > lcov.info
       #    cat lcov.info
-      - name: Get Project Source
-        uses: actions/download-artifact@master
-        with:
-          name: appSource
-          path: src/app
 
-      - name: Get Project LCOV
-        uses: actions/download-artifact@master
-        with:
-          name: appLcov
-          path: ./lcov.info
+  #    - name: Get Project Source
+  #      uses: actions/download-artifact@master
+  #      with:
+  #        name: appSource
+  #        path: src/app
 
-      - name: SonarQube Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args:
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.organization=europeana
-            -Dsonar.projectKey=europeana_statistics-dashboard
-            -Dsonar.test.inclusions=**/*.spec.ts
-            -Dsonar.sources=src/app
-            -Dsonar.exclusions=src/**/_mocked/**
-            -Dsonar.javascript.lcov.reportPaths=./lcov.info/lcov.info
+  #    - name: Get Project LCOV
+  #      uses: actions/download-artifact@master
+  #      with:
+  #        name: appLcov
+  #        path: ./lcov.info
+
+  #    - name: SonarQube Scan
+  #      uses: sonarsource/sonarcloud-github-action@master
+  #      env:
+  #        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #      with:
+  #        args:
+  #          -Dsonar.host.url=https://sonarcloud.io
+  #          -Dsonar.organization=europeana
+  #          -Dsonar.projectKey=europeana_statistics-dashboard
+  #          -Dsonar.test.inclusions=**/*.spec.ts
+  #          -Dsonar.sources=src/app
+  #          -Dsonar.exclusions=src/**/_mocked/**
+  #          -Dsonar.javascript.lcov.reportPaths=./lcov.info/lcov.info
           #-Dsonar.javascript.lcov.reportPaths=lcov.info
 
   build-dist:
@@ -142,7 +143,7 @@ jobs:
       ${{ github.event.inputs.run_build == 'false'
       || !(cancelled() || contains(needs.*.result, 'failure')) }}
     #needs: [build-dist, run-tests]
-    needs: [build-dist, run-ci]
+    needs: [build-dist, tests]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

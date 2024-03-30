@@ -11,7 +11,7 @@ on:
 jobs:
 
   unit:
-    if: ${{ github.event.inputs.run_build == 'true' }}
+    #if: ${{ github.event.inputs.run_build == 'true' }}
     runs-on: ubuntu-latest
     # Map the job outputs to step outputs
     outputs:
@@ -51,7 +51,7 @@ jobs:
       #    echo $output >> $GITHUB_OUTPUT
 
   run-sonar:
-    if: ${{ github.event.inputs.run_build == 'true' }}
+    #if: ${{ github.event.inputs.run_build == 'true' }}
     #needs: [run-tests, run-cypress]
     needs: [unit]
     runs-on: ubuntu-latest
