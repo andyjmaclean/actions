@@ -1,5 +1,11 @@
 name: '- helper (testing)'
-on: workflow_call
+on:
+  workflow_call:
+    outputs:
+      pass_unit:
+        description: "Good enough?"
+        value: ${{ jobs['run-unit-tests'].outputs.result }}
+
 jobs:
   run-cypress:
     if: ${{ github.event.inputs.run_build == 'true' }}
@@ -14,13 +20,14 @@ jobs:
         with:
           node-version: '18.18.0'
       - run: npm install
-      - run: |
-          npm run start:ci-data & echo 'started test-data server'
-      - run: |
-          sleep 10
-      - run: |
-          npm run cypress:run
-
+      - name: Run Cypress Tests
+        run: |
+          ((npm run start:ci-data & echo 'started test-data server')
+          && sleep 15) & (npm run cypress:run)
+      - name: close test-data server
+        if: success() || failure()
+        run: |
+          fuser -k 3001/tcp
       - name: close test-data server
         if: success() || failure()
         run: fuser -k 3001/tcp,
@@ -39,19 +46,22 @@ jobs:
           node-version: '18.18.0'
       - run: npm install
 
-      - run: |
+      - name: Run Cypress Tests
+        run: |
           ((npm run start:ci-data & echo 'started test-data server')
-          && sleep 10) & (npm run cypress:ci-accessibility)
+          && sleep 15) & (npm run cypress:ci-accessibility)
 
       - name: close test-data server
         if: success() || failure()
         run: |
           fuser -k 3001/tcp
 
-
   run-unit-tests:
     if: ${{ github.event.inputs.run_build == 'true' }}
     runs-on: ubuntu-latest
+    # Map the job outputs to step outputs
+    outputs:
+      result: ${{ steps['run-unit-tests-step'].outputs }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -62,7 +72,8 @@ jobs:
         with:
           node-version: '18.18.0'
       - run: npm install
-      - run: npm run test:dev
+      - id: run-unit-tests-step
+        run: npm run test:dev >> $GITHUB_OUTPUT
       - run: cp coverage/**/lcov.info .
       - uses: actions/upload-artifact@master
         with:
