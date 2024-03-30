@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo 'qa....'
+          echo ${{ needs['run-e2e'].outputs['qa_pass'] }}
       - name: Checkout
         uses: actions/checkout@v4
         with:
