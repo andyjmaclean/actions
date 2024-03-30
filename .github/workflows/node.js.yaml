@@ -82,13 +82,12 @@ jobs:
     needs: [build-dist, tests, e2e]
 
     if: |
-      ${{ github.event.inputs.run_build == 'true' }}
+      ${{ github.event.inputs.run_build == 'true' && needs.e2e.outputs.qa_pass }}
 
     runs-on: ubuntu-latest
     steps:
       - run |
           echo 'qa....'
-          echo ${{ job.needs.e2e.outputs.qa_pass }}
       - name: Checkout
         uses: actions/checkout@v4
         with:
