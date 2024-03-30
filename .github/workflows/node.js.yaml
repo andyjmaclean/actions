@@ -141,9 +141,14 @@ jobs:
           path: ./dist
 
   push-docker-image:
+    #if: |
+    #  ${{ github.event.inputs.run_build == 'false'
+    #  || !(cancelled() || contains(needs.*.result, 'failure')) }}
+
     if: |
-      ${{ github.event.inputs.run_build == 'false'
-      || !(cancelled() || contains(needs.*.result, 'failure')) }}
+      ${{ github.event.inputs.run_build == 'true'
+      && !cancelled() && !contains(needs.*.result, 'failure')) }}
+
     needs: [build-dist, tests]
     runs-on: ubuntu-latest
     steps:
@@ -197,6 +202,7 @@ jobs:
 
   push-to-kubernetes:
     if: always() && !contains(needs.*.result, 'failure')
+    #needs: [tests, push-docker-image, make-env-file]
     needs: [tests, push-docker-image, make-env-file]
     uses: ./.github/workflows/deploy-image.yaml
     secrets: inherit

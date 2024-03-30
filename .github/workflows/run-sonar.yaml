@@ -14,10 +14,8 @@ jobs:
       - name: Get Project LCOV
         uses: actions/download-artifact@master
         with:
-          name: lcov.info
-        #  path: ./lcov.info
-        #  name: appLcov
-        #  path: ./lcov.info
+          name: appLcov
+          path: ./lcov.info
 
       - name: SonarQube Scan
         uses: sonarsource/sonarcloud-github-action@master
