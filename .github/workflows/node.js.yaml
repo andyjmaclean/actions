@@ -37,6 +37,8 @@ jobs:
     secrets: inherit
 
   run-e2e:
+    outputs:
+      qa_pass: number
     if: ${{ github.event.inputs.run_build == 'true' }}
     name: 'e2e'
     uses: ./.github/workflows/run-tests-e2e.yaml
@@ -79,10 +81,10 @@ jobs:
     #  ${{ github.event.inputs.run_build == 'false'
     #  || !(cancelled() || contains(needs.*.result, 'failure')) }}
 
-    needs: [build-dist, tests, e2e]
+    needs: [build-dist, tests, run-e2e]
 
     if: |
-      ${{ github.event.inputs.run_build == 'true' && needs.e2e.outputs.qa_pass }}
+      ${{ github.event.inputs.run_build == 'true' && needs['run-e2e'].outputs['qa_pass'] == 0 }}
 
     runs-on: ubuntu-latest
     steps:
