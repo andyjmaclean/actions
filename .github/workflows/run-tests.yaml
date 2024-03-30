@@ -44,8 +44,10 @@ jobs:
 
       - uses: actions/upload-artifact@master
         with:
-          name: appLcov
-          path: ./lcov.info
+          name: lcov.info
+        #  path: ./lcov.info
+        #  name: appLcov
+        #  path: ./lcov.info
 
       - id: collect-coverage-step
         run: |

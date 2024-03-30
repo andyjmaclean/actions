@@ -5,12 +5,6 @@ jobs:
     if: ${{ github.event.inputs.run_build == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      #- run: |
-      #    echo "${{ needs['test'].outputs.lcov }}"
-      #    echo "${{ needs['run-ci'].outputs.lcov }}"
-      #    echo "${{ needs['run-ci'].outputs.lcov }}" > lcov.info
-      #    cat lcov.info
-
       - name: Get Project Source
         uses: actions/download-artifact@master
         with:
@@ -20,8 +14,10 @@ jobs:
       - name: Get Project LCOV
         uses: actions/download-artifact@master
         with:
-          name: appLcov
-          path: ./lcov.info
+          name: lcov.info
+        #  path: ./lcov.info
+        #  name: appLcov
+        #  path: ./lcov.info
 
       - name: SonarQube Scan
         uses: sonarsource/sonarcloud-github-action@master
