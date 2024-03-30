@@ -1,0 +1,22 @@
+name: '- helper (sonar)'
+on: workflow_call
+jobs:
+  run-sonar:
+    runs-on: ubuntu-latest
+    steps:
+
+    #if: ${{ github.event.inputs.run_build == 'true' }}
+    #uses: ./.github/workflows/run-tests.yaml
+    #secrets: inherit
+    - run: |
+        mkdir hello
+        echo "helllo" | hello.txt
+    - uses: actions/upload-artifact@master
+      with:
+        name: hello.txt
+        path: hello
+
+
+# TODO finish this new file... an experiment to get the share working across workkflows
+
+# and wit that fone, to not have PUSH docker waiting for sonar.
