@@ -48,6 +48,8 @@ jobs:
   xxxsonar:
     if: true || ${{ github.event.inputs.run_build == 'true' }}
     uses: ./.github/workflows/run-sonar.yaml
+    with:
+      client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "test": "test message"}'
     secrets: inherit
 
   get-sonar-outputs:
