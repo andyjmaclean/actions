@@ -46,7 +46,7 @@ jobs:
     secrets: inherit
 
   xxxsonar:
-    if: ${{ github.event.inputs.run_build == 'true' }}
+    if: true || ${{ github.event.inputs.run_build == 'true' }}
     uses: ./.github/workflows/run-sonar.yaml
     secrets: inherit
 
