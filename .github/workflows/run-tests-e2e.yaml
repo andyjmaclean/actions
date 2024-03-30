@@ -9,8 +9,7 @@ jobs:
     if: ${{ github.event.inputs.run_build == 'true' }}
     runs-on: ubuntu-latest
     outputs:
-      qa_pass:
-        value: ${{ steps['execute'].outputs.qa_pass }}
+      qa_pass: ${{ steps['execute'].outputs.qa_pass }}
     steps:
 
       - name: Checkout
