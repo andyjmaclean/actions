@@ -147,7 +147,7 @@ jobs:
 
     if: |
       ${{ github.event.inputs.run_build == 'true'
-      && !cancelled() && !contains(needs.*.result, 'failure')) }}
+      && !cancelled() && !contains(needs.*.result, 'failure') }}
 
     needs: [build-dist, tests]
     runs-on: ubuntu-latest
