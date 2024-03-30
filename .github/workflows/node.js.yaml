@@ -37,8 +37,6 @@ jobs:
     secrets: inherit
 
   run-e2e:
-    outputs:
-      qa_pass: number
     if: ${{ github.event.inputs.run_build == 'true' }}
     name: 'e2e'
     uses: ./.github/workflows/run-tests-e2e.yaml
