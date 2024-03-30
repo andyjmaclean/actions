@@ -1,10 +1,16 @@
 name: '- helper (e2e testing)'
-on: workflow_call
+on:
+  workflow_call:
+    outputs:
+      qa_pass:
+        value: ${{ jobs['cypress'].outputs.qa_pass }}
 jobs:
   cypress:
     if: ${{ github.event.inputs.run_build == 'true' }}
     runs-on: ubuntu-latest
-    continue-on-error: true
+    outputs:
+      qa_pass:
+        value: ${{ steps['execute'].outputs.qa_pass }}
     steps:
 
       - name: Checkout
@@ -19,9 +25,10 @@ jobs:
 
 
       - name: Run Cypress Tests
+        id: execute
         run: |
           (npm run start:ci-data) & (sleep 10 && npm run cypress:ci)
-
+          echo qa_pass=$? >> $GITHUB_OUTPUT
 
       - name: close test-data server
         if: success() || failure()
