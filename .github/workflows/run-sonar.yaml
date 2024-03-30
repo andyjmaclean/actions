@@ -14,8 +14,8 @@ jobs:
         name: hello.txt
         path: hello
     - run: |
-      echo 'payload.....'
-      echo ${{ github.event.client_payload.sha }}
+        echo 'payload.....'
+        echo ${{ github.event.client_payload.sha }}
 
 
 # TODO finish this new file... an experiment to get the share working across workkflows
