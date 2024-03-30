@@ -2,10 +2,10 @@ name: '- helper (unit testing)'
 on:
   workflow_call:
     outputs:
-      pass_unit:
-        value: ${{ jobs['unit'].outputs.result }}
+      #pass_unit:
+      #  value: ${{ jobs['unit'].outputs.result }}
       lcov:
-        description: "report"
+        description: "lcov report"
         value: ${{ jobs['unit'].outputs.lcov }}
 
 jobs:
@@ -15,8 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     # Map the job outputs to step outputs
     outputs:
-      result: ${{ steps['run-unit-tests-step'].outputs.result }}
-      lcov: "fails at scan time"
+      #result: ${{ steps['run-unit-tests-step'].outputs.result }}
+      lcov: ${{ steps['collect-coverage-step'].outputs.lcov }}
+      #lcov: "fails at scan time"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,7 +31,10 @@ jobs:
       - id: run-unit-tests-step
         run: |
           npm run test:dev
-          echo result=$? >> $GITHUB_OUTPUT
+        #  echo result=$? >> $GITHUB_OUTPUT
+        #  cp coverage/**/lcov.info .
+
+      - run: |
           cp coverage/**/lcov.info .
 
       - uses: actions/upload-artifact@master
@@ -43,12 +47,13 @@ jobs:
           name: appLcov
           path: ./lcov.info
 
-
-      #- id: collect-coverage
-      #  run: |
-      #    cp coverage/**/lcov.info .
-      #    output="lcov=$(cat lcov.info)"
-      #    echo $output >> $GITHUB_OUTPUT
+      - id: collect-coverage-step
+        run: |
+          cp coverage/**/lcov.info .
+          output="lcov=$(cat lcov.info)"
+          echo $output >> $GITHUB_OUTPUT
+          echo 'set output in collect cov step '
+          echo $output
 
   run-sonar:
     #if: ${{ github.event.inputs.run_build == 'true' }}
