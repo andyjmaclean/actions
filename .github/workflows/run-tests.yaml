@@ -41,13 +41,12 @@ jobs:
 
       - run: |
           ((npm run start:ci-data & echo 'started test-data server')
-          &&
-          sleep 10)
-          & npm run cypress:ci-accessibility
+          && sleep 10) & (npm run cypress:ci-accessibility)
 
       - name: close test-data server
         if: success() || failure()
-        run: fuser -k 3001/tcp,
+        run: |
+          fuser -k 3001/tcp
 
 
   run-unit-tests:
