@@ -14,10 +14,12 @@ jobs:
         with:
           node-version: '18.18.0'
       - run: npm install
-
       - run: |
           npm run start:ci-data & echo 'started test-data server'
-      - run: npm run cypress:run
+      - run: |
+          sleep 10
+      - run: |
+          npm run cypress:run
 
       - name: close test-data server
         if: success() || failure()
@@ -39,7 +41,10 @@ jobs:
 
       - run: |
           npm run start:ci-data & echo 'started test-data server'
-      - run: cypress:ci-accessibility
+      - run: |
+          sleep 10
+      - run: |
+          npm run cypress:ci-accessibility
 
       - name: close test-data server
         if: success() || failure()
