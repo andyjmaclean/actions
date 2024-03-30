@@ -84,12 +84,11 @@ jobs:
     if: |
       ${{ github.event.inputs.run_build == 'true' }}
 
-
     runs-on: ubuntu-latest
     steps:
       - run |
           echo 'qa....'
-          echo ${{ needs.e2e.outputs.qa_pass }}
+          echo ${{ job.needs.e2e.outputs.qa_pass }}
       - name: Checkout
         uses: actions/checkout@v4
         with:
