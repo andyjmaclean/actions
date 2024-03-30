@@ -15,7 +15,8 @@ jobs:
           node-version: '18.18.0'
       - run: npm install
 
-      - run: npm run start:ci-data
+      - run: |
+          npm run start:ci-data & echo 'started test-data server'
       - run: npm run cypress:run
 
       - name: close test-data server
@@ -36,8 +37,9 @@ jobs:
           node-version: '18.18.0'
       - run: npm install
 
-      - run: npm run start:ci-data
-      - run: cypress run --spec **/*a11y.cy.ts
+      - run: |
+          npm run start:ci-data & echo 'started test-data server'
+      - run: cypress:ci-accessibility
 
       - name: close test-data server
         if: success() || failure()
