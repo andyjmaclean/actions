@@ -86,7 +86,7 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - run |
+      - run: |
           echo 'qa....'
       - name: Checkout
         uses: actions/checkout@v4
