@@ -82,7 +82,7 @@ jobs:
     needs: [build-dist, tests, run-e2e]
 
     if: |
-      ${{ github.event.inputs.run_build == 'true' && needs['run-e2e'].outputs['qa_pass'] == 1 }}
+      ${{ github.event.inputs.run_build == 'true' && needs['run-e2e'].outputs['qa_pass'] == '1' }}
 
     runs-on: ubuntu-latest
     steps:
