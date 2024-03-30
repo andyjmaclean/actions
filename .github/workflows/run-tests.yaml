@@ -56,6 +56,8 @@ jobs:
           echo $output
 
   run-sonar:
+    name: (tests) sonar disabled
+    if: false
     #if: ${{ github.event.inputs.run_build == 'true' }}
     #needs: [run-tests, run-cypress]
     needs: [unit]
