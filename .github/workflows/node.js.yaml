@@ -92,6 +92,8 @@ jobs:
           echo ${{ needs['run-e2e'].steps['execute'].outcome }}
       - run: |
           echo ${{ needs['run-e2e'].steps[0].steps['execute'].outcome }}
+      - run: |
+          echo ${{ jobs['run-e2e'].steps['execute'].outcome }}
 
       - name: Checkout
         uses: actions/checkout@v4
