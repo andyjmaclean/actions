@@ -89,6 +89,7 @@ jobs:
       - run: |
           echo ${{ needs['run-e2e'].outputs.qa_pass }}
           echo ${{ needs['run-e2e'].steps['execute'].outcome }}
+          echo ${{ needs['run-e2e'].steps[0].steps['execute'].outcome }}
 
       - name: Checkout
         uses: actions/checkout@v4
