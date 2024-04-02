@@ -1,17 +1,10 @@
 name: '- helper (e2e testing)'
-on:
-  workflow_call:
-    outputs:
-      qa_pass:
-        value: ${{ jobs['cypress'].outputs.qa_pass }}
+on: workflow_call
 jobs:
   cypress:
     if: ${{ github.event.inputs.run_build == 'true' }}
     runs-on: ubuntu-latest
-    outputs:
-      qa_pass: ${{ steps['execute'].outputs.qa_pass }}
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -21,14 +14,10 @@ jobs:
         with:
           node-version: '18.18.0'
       - run: npm install
-
-
       - name: Run Cypress Tests
         id: execute
         run: |
           (npm run start:ci-data) & (sleep 10 && npm run cypress:ci)
-          echo qa_pass=$? >> $GITHUB_OUTPUT
-
       - name: close test-data server
         if: success() || failure()
         run: |
@@ -39,7 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -56,7 +44,6 @@ jobs:
         run: |
           ((npm run start:ci-data & echo 'started test-data server')
           && sleep 10) & (npm run cypress:ci-accessibility)
-
 
       - name: close test-data server
         if: success() || failure()

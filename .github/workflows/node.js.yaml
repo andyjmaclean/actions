@@ -41,14 +41,15 @@ jobs:
     name: 'e2e'
     uses: ./.github/workflows/run-tests-e2e.yaml
 
-  tests:
+  run-unit:
     if: ${{ github.event.inputs.run_build == 'true' }}
+    name: 'tests'
     uses: ./.github/workflows/run-tests.yaml
     secrets: inherit
 
   run-sonar:
     if: ${{ github.event.inputs.run_build == 'true' }}
-    needs: [tests]
+    needs: [run-unit]
     uses: ./.github/workflows/run-sonar.yaml
     secrets: inherit
 
@@ -75,26 +76,10 @@ jobs:
           path: ./dist
 
   push-docker-image:
-    #if: |
-    #  ${{ github.event.inputs.run_build == 'false'
-    #  || !(cancelled() || contains(needs.*.result, 'failure')) }}
-
-    needs: [build-dist, tests, run-e2e]
-
-    if: |
-      ${{ github.event.inputs.run_build == 'true' && needs['run-e2e'].outputs['qa_pass'] == '1' }}
-
+    needs: [build-dist, run-unit, run-e2e]
+    if: ${{ github.event.inputs.run_build == 'true'
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo ${{ needs['run-e2e'].outputs.qa_pass }}
-      - run: |
-          echo ${{ needs['run-e2e'].steps['execute'].outcome }}
-      - run: |
-          echo ${{ needs['run-e2e'].steps[0].steps['execute'].outcome }}
-      - run: |
-          echo ${{ jobs['run-e2e'].steps['execute'].outcome }}
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -146,6 +131,7 @@ jobs:
   push-to-kubernetes:
     if: always() && !contains(needs.*.result, 'failure')
     #needs: [tests, push-docker-image, make-env-file]
-    needs: [tests, push-docker-image, make-env-file]
+    #needs: [tests, push-docker-image, make-env-file]
+    needs: [push-docker-image, make-env-file]
     uses: ./.github/workflows/deploy-image.yaml
     secrets: inherit
