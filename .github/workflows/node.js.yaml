@@ -77,7 +77,7 @@ jobs:
 
   push-docker-image:
     needs: [build-dist, run-unit, run-e2e]
-    if: ${{ github.event.inputs.run_build == 'true'
+    if: ${{ github.event.inputs.run_build == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
