@@ -39,8 +39,8 @@ jobs:
       - name: DEBUG
         run: |
           orig=${{ github.event.inputs.tag_name }}
-          mod=${orig//[\/]/_}
-          echo ${{ $mod || 'develop' }}
+
+          echo ${{ orig//[\/]/_|| 'develop' }}
 
   make-env-file:
     uses: ./.github/workflows/env-file-generation.yaml
