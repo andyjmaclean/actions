@@ -38,10 +38,8 @@ jobs:
     steps:
       - name: DEBUG
         run: |
-          orig=github.event.inputs.tag_name
+          orig=${{ github.event.inputs.tag_name }}
           mod=${orig//[\/]/_}
-          echo mod
-          
           echo ${{ mod || 'develop' }}
 
   make-env-file:
