@@ -39,8 +39,9 @@ jobs:
       - name: DEBUG
         run: |
           tag=${{ github.event.inputs.tag_name || 'develop' }}
-
           echo ${tag//[\/]/_}
+          newTag=${tag//[\/]/_}
+          echo $newTag
 
   make-env-file:
     uses: ./.github/workflows/env-file-generation.yaml
