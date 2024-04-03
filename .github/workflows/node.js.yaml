@@ -32,6 +32,18 @@ on:
         default: false
         type: boolean
 jobs:
+
+  runX:
+    runs-on: ubuntu-latest
+    steps:
+      - name: DEBUG
+        run: |
+          orig=github.event.inputs.tag_name
+          mod=${orig//[\/]/_}
+          echo mod
+          
+          echo ${{ mod || 'develop' }}
+
   make-env-file:
     uses: ./.github/workflows/env-file-generation.yaml
     #with:
